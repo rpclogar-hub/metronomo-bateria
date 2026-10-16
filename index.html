@@ -434,6 +434,15 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   function soltarTela() { try { if (wake && !comum.running && !treino.running) { wake.release(); wake = null; } } catch (e) {} }
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
+  /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
+  const VERSAO = '2026-10-16-3';
+  try {
+    fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
+      const m = t.match(/const VERSAO = '([^']+)'/);
+      if (m && m[1] !== VERSAO && !/[?&]v=/.test(location.search)) location.replace(location.pathname + '?v=' + m[1]);
+    }).catch(() => {});
+  } catch (e) {}
+
   /* ---------- abas ---------- */
   const tabs = { com: [$('tab-com'), $('p-com')], tre: [$('tab-tre'), $('p-tre')] };
   function showTab(k) {
