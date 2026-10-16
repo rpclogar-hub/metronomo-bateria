@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Metrônomo de Bateria</title>
+<meta name="description" content="Metrônomo comum de 50 a 300 BPM e treino de bateria com alternância de mãos, de 1 a 20 batidas por mão.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#1b1bf2;--blue-deep:#1717bd;--mist:#e9edff;--line:#cbd4f1;
+  --navy:#0e0f2c;--accent:#ff5100;--accent-light:#fb923c;
+  --paper:#f6f8ff;--ink2:#2e3350;--body:#4f5875;--note:#535e7a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Inter",Arial,sans-serif;background:var(--navy);color:#fff;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+:focus-visible{outline:3px solid var(--accent-light);outline-offset:3px}
+.progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#ff5100,#fb923c);z-index:50}
+
+/* hero */
+.hero{position:relative;padding:72px 24px 80px;background:radial-gradient(circle at 85% 0%,#2934a9 0,transparent 45%),var(--navy);overflow:hidden}
+.wrap{max-width:1080px;margin:0 auto}
+.eyebrow{font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-light);margin-bottom:18px}
+.hero h1{font-size:clamp(2.4rem,5vw,3.5rem);line-height:1.08;letter-spacing:-.05em;font-weight:700;background:linear-gradient(180deg,#fff,#c9cee0);-webkit-background-clip:text;background-clip:text;color:transparent;max-width:760px}
+.hero h2{font-size:clamp(1.3rem,2.4vw,1.8rem);font-weight:300;letter-spacing:-.03em;margin-top:18px;max-width:620px}
+.hero h2 span{font-weight:600;background:linear-gradient(90deg,#ff5100,#fb923c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:1.1rem;font-weight:300;color:#b5bad2;max-width:600px;margin-top:18px}
+
+/* cenas claras */
+.scene{position:relative;padding:72px 24px;font-family:Arial,Helvetica,sans-serif;color:var(--body);overflow:hidden}
+.scene.a{background:var(--paper)}
+.scene.b{background:#fff}
+.scene.a::before{content:"";position:absolute;inset:-20%;background:
+  radial-gradient(circle at 20% 30%,#dce3ff88,transparent 40%),
+  radial-gradient(circle at 80% 20%,#e9edff99,transparent 40%),
+  radial-gradient(circle at 60% 90%,#dce3ff66,transparent 40%);
+  animation:mist 32s ease-in-out infinite alternate;pointer-events:none}
+@keyframes mist{to{transform:translate(4%,3%) scale(1.06)}}
+.scene>.wrap{position:relative}
+.kicker{display:flex;align-items:center;gap:12px;font-size:.72rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--primary);margin-bottom:16px}
+.kicker::before{content:"";width:31px;height:2px;background:currentColor}
+.title{font-size:clamp(1.9rem,3.35vw,3.2rem);line-height:1.11;letter-spacing:-.045em;text-wrap:balance;color:var(--navy);max-width:900px;margin-bottom:22px}
+.lead{font-size:clamp(1.05rem,1.4vw,1.2rem);line-height:1.57;color:var(--ink2);max-width:760px}
+
+.soundbar{display:flex;flex-wrap:wrap;align-items:flex-end;gap:22px;margin-top:30px;padding-top:18px;border-top:2px solid var(--navy)}
+.soundbar select{min-width:210px}
+.soundbar .ghost{padding:11px 22px}
+.soundbar input[type=range]{width:160px;flex:none}
+/* abas */
+.tabs{display:flex;border-bottom:1px solid var(--line);margin:34px 0 0}
+.tab{padding:14px 22px;font-weight:700;font-size:.95rem;color:var(--note);border-bottom:3px solid transparent;margin-bottom:-1px;letter-spacing:-.01em}
+.tab[aria-selected=true]{color:var(--primary);border-color:var(--primary)}
+.panel{display:none;padding-top:34px}
+.panel.on{display:block}
+
+/* painel */
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start}
+.bpm-box{border-top:2px solid var(--navy);padding-top:18px}
+.label{font-size:.72rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--note)}
+.bpm-num{font-size:clamp(4.5rem,11vw,7.5rem);font-weight:800;letter-spacing:-.075em;line-height:1;color:var(--navy);font-variant-numeric:tabular-nums}
+.bpm-num small{font-size:1rem;letter-spacing:.05em;color:var(--primary);margin-left:8px;font-weight:800}
+.row{display:flex;align-items:center;gap:14px;margin-top:18px}
+.step{width:48px;height:48px;border:1px solid var(--line);background:#fff;border-radius:3px;font-size:1.4rem;font-weight:700;color:var(--primary);flex:none}
+.step:hover{background:var(--mist)}
+input[type=range]{flex:1;accent-color:var(--primary);height:28px}
+.opts{display:flex;flex-wrap:wrap;gap:22px;margin-top:26px}
+.opts+.opts{margin-top:18px}
+#p-tre .opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+#p-tre .opts select,#p-tre .opts input{width:100%;min-width:0}
+@media(max-width:560px){#p-tre .opts{grid-template-columns:1fr 1fr}}
+.opt{display:flex;flex-direction:column;gap:6px}
+select,input[type=number]{font:inherit;font-size:1rem;padding:10px 12px;border:1px solid var(--line);border-radius:3px;background:#fff;color:var(--navy);min-width:96px}
+.btns{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
+.cta{padding:16px 40px;border-radius:999px;font-weight:700;font-size:1.05rem;color:#fff;background:linear-gradient(90deg,#ff5100,#fb923c);box-shadow:0 8px 24px #ff510033;min-width:170px}
+.cta[data-on=true]{background:var(--navy);box-shadow:none}
+.ghost{padding:15px 26px;border:1px solid var(--primary);border-radius:999px;font-weight:700;color:var(--primary);background:#fff}
+.ghost:hover{background:var(--mist)}
+
+/* indicadores */
+.beats{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+.dot{width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:#fff;display:grid;place-items:center;font-weight:800;color:var(--note);transition:.08s}
+.dot.on{background:var(--primary);border-color:var(--primary);color:#fff;transform:scale(1.12)}
+.dot.acc.on{background:var(--navy);border-color:var(--navy)}
+
+/* pads de bateria */
+.pads{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pad{border:1px solid var(--line);border-top:3px solid var(--line);background:#fff;border-radius:4px;padding:26px 16px;text-align:center;transition:background .06s,border-color .06s,transform .06s}
+.pad b{display:block;font-size:clamp(2.6rem,6vw,4rem);letter-spacing:-.06em;color:var(--navy);line-height:1}
+.pad span{font-size:.72rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--note)}
+.pad.hit{background:var(--primary);border-color:var(--primary);transform:scale(1.03)}
+.pad.hit b,.pad.hit span{color:#fff}
+.pad .cnt{display:block;margin-top:10px;font-size:1.05rem;font-weight:700;color:var(--primary);font-variant-numeric:tabular-nums}
+.pad.hit .cnt{color:#fff}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:22px;border-top:1px solid var(--line)}
+.stat{padding:16px 14px 0 0}
+.stat+.stat{padding-left:16px;border-left:1px solid var(--line)}
+.stat strong{display:block;font-size:1.7rem;letter-spacing:-.05em;color:var(--navy);font-variant-numeric:tabular-nums}
+.bar{height:6px;background:var(--mist);border-radius:2px;margin-top:22px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--primary);transition:width .2s}
+.msg{margin-top:14px;font-size:.9rem;color:var(--note);min-height:1.4em}
+.flash{background:var(--mist);border-left:3px solid var(--primary);padding:12px 16px;color:var(--navy);font-weight:700;display:none;margin-top:14px}
+.flash.on{display:block}
+
+/* passos */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:34px;border-top:2px solid var(--navy)}
+.s{padding:22px 24px 0 0}
+.s+.s{padding-left:24px;border-left:1px solid var(--line)}
+.s em{font-style:normal;font-weight:800;font-size:.8rem;color:var(--primary)}
+.s h3{font-size:1.2rem;letter-spacing:-.03em;color:var(--navy);margin:6px 0 8px}
+.s p{font-size:.95rem;line-height:1.5}
+.ex{margin-top:30px;border:1px solid var(--line);background:#fff;border-radius:3px;padding:18px 20px;font-size:.95rem;color:var(--ink2);font-variant-numeric:tabular-nums}
+.question{margin-top:44px;font-size:clamp(1.3rem,1.85vw,1.8rem);font-weight:700;letter-spacing:-.025em;color:var(--primary);max-width:900px;text-wrap:balance}
+footer{padding:34px 24px;background:var(--navy);color:#b5bad2;font-size:.85rem}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media(max-width:820px){
+  .grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .s+.s{border-left:0;border-top:1px solid var(--line);padding-left:0;margin-top:20px;padding-top:20px}
+  .scene{padding:52px 20px}.hero{padding:52px 20px 60px}
+  .tab{padding:12px 14px;font-size:.88rem}
+  .stats{grid-template-columns:1fr 1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="progress" id="prog" aria-hidden="true"></div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Estudo de bateria</div>
+    <h1>Metrônomo de Bateria</h1>
+    <h2>Treine as duas mãos, <span>do lento ao veloz.</span></h2>
+    <p>Metrônomo comum de 50 a 300 BPM e um treino que alterna as mãos de 1 a 20 batidas, subindo o andamento sozinho.</p>
+  </div>
+</header>
+
+<section class="scene a" id="metronomo" aria-labelledby="t1">
+  <div class="wrap">
+    <div class="kicker">01 / Metrônomo</div>
+    <h2 class="title" id="t1">Escolha o modo de estudo</h2>
+    <p class="lead">Use o metrônomo comum para marcar o tempo ou o treino de bateria para desenvolver a independência e a velocidade das mãos.</p>
+
+    <div class="soundbar">
+      <div class="opt">
+        <label class="label" for="snd">Som do metrônomo</label>
+        <select id="snd"></select>
+      </div>
+      <button class="ghost" id="snd-test" type="button">Ouvir som</button>
+      <div class="opt">
+        <label class="label" for="vol">Volume</label>
+        <input type="range" id="vol" min="0" max="100" value="80" aria-label="Volume">
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-com" aria-selected="true" aria-controls="p-com">Metrônomo comum</button>
+      <button class="tab" role="tab" id="tab-tre" aria-selected="false" aria-controls="p-tre">Treino de bateria</button>
+    </div>
+
+    <!-- COMUM -->
+    <div class="panel on" id="p-com" role="tabpanel" aria-labelledby="tab-com">
+      <div class="grid">
+        <div>
+          <div class="bpm-box">
+            <div class="label">Andamento</div>
+            <div class="bpm-num"><span id="c-bpm">120</span><small>BPM</small></div>
+            <div class="row">
+              <button class="step" id="c-minus" aria-label="Diminuir 1 BPM">−</button>
+              <input type="range" id="c-range" min="50" max="300" value="120" aria-label="BPM">
+              <button class="step" id="c-plus" aria-label="Aumentar 1 BPM">+</button>
+            </div>
+          </div>
+          <div class="btns">
+            <button class="cta" id="c-play" data-on="false">Iniciar</button>
+            <button class="ghost" id="c-tap">Tap tempo</button>
+          </div>
+        </div>
+        <div>
+          <div class="label">Compasso</div>
+          <div class="opts" style="margin-top:10px">
+            <div class="opt">
+              <label class="label" for="c-sig">Tempos por compasso</label>
+              <select id="c-sig"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>
+            </div>
+            <div class="opt">
+              <label class="label" for="c-acc">Acento no 1</label>
+              <select id="c-acc"><option value="1" selected>Ligado</option><option value="0">Desligado</option></select>
+            </div>
+          </div>
+          <div class="label" style="margin-top:28px">Batida</div>
+          <div class="beats" id="c-beats" style="margin-top:10px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TREINO -->
+    <div class="panel" id="p-tre" role="tabpanel" aria-labelledby="tab-tre">
+      <div class="grid">
+        <div>
+          <div class="bpm-box">
+            <div class="label">Andamento atual</div>
+            <div class="bpm-num"><span id="t-bpm">100</span><small>BPM</small></div>
+            <div class="bar" aria-hidden="true"><i id="t-bar"></i></div>
+            <div class="msg" id="t-msg">Escolha o BPM inicial e comece.</div>
+            <div class="flash" id="t-flash" role="status"></div>
+          </div>
+          <div class="opts">
+            <div class="opt">
+              <label class="label" for="t-start">BPM inicial</label>
+              <input type="number" id="t-start" min="20" max="400" step="1" value="100">
+            </div>
+            <div class="opt">
+              <label class="label" for="t-max">BPM final</label>
+              <input type="number" id="t-max" min="20" max="400" step="1" value="300">
+            </div>
+            <div class="opt">
+              <label class="label" for="t-inc">Aumento</label>
+              <select id="t-inc"><option>1</option><option>2</option><option selected>5</option><option>10</option></select>
+            </div>
+          </div>
+          <div class="opts">
+            <div class="opt">
+              <label class="label" for="t-minn">Começar em (por mão)</label>
+              <select id="t-minn"></select>
+            </div>
+            <div class="opt">
+              <label class="label" for="t-maxn">Até quantas por mão</label>
+              <select id="t-maxn"></select>
+            </div>
+            <div class="opt">
+              <label class="label" for="t-warn">Aviso de troca de mão</label>
+              <select id="t-warn">
+                <option value="bip" selected>Alerta nas 3 últimas</option>
+                <option value="voz">Voz 3, 2, 1, troca</option>
+                <option value="ambos">Alerta + voz</option>
+                <option value="off">Sem aviso</option>
+              </select>
+            </div>
+          </div>
+          <div class="btns">
+            <button class="cta" id="t-play" data-on="false">Iniciar treino</button>
+            <button class="ghost" id="t-reset">Reiniciar</button>
+          </div>
+        </div>
+        <div>
+          <div class="pads">
+            <div class="pad" id="pad-D"><span>Mão direita</span><b>D</b><i class="cnt" id="cnt-D">–</i></div>
+            <div class="pad" id="pad-E"><span>Mão esquerda</span><b>E</b><i class="cnt" id="cnt-E">–</i></div>
+          </div>
+          <div class="stats">
+            <div class="stat"><span class="label">Sequência</span><strong id="t-seq">1 / 20</strong></div>
+            <div class="stat"><span class="label">Batida</span><strong id="t-hit">–</strong></div>
+            <div class="stat"><span class="label">Por mão</span><strong id="t-per">1</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scene b" aria-labelledby="t2">
+  <div class="wrap">
+    <div class="kicker">02 / Como funciona o treino</div>
+    <h2 class="title" id="t2">Uma sequência por vez, no mesmo andamento</h2>
+    <p class="lead">Cada clique do metrônomo é uma batida de baqueta. Você alterna as mãos em blocos que crescem a cada sequência.</p>
+    <div class="steps">
+      <div class="s"><em>01</em><h3>Blocos por mão</h3><p>Sequência 1: 1 batida direita, 1 esquerda. Sequência 2: 2 direitas, 2 esquerdas. Assim até 20 de cada lado.</p></div>
+      <div class="s"><em>02</em><h3>Mesmo BPM</h3><p>Todas as 20 sequências acontecem no mesmo andamento. A contagem vai de 1 até 40 no bloco final.</p></div>
+      <div class="s"><em>03</em><h3>Sobe 5 BPM</h3><p>Ao terminar a sequência de 20, o andamento aumenta 5 BPM e tudo recomeça na sequência 1, até o BPM final.</p></div>
+    </div>
+    <div class="ex"><strong>Exemplo a 120 BPM:</strong> D · E &nbsp;→&nbsp; D D · E E &nbsp;→&nbsp; D D D · E E E &nbsp;→ … →&nbsp; 20 D · 20 E &nbsp;→&nbsp; 125 BPM</div>
+    <p class="question">Quantas batidas por mão você consegue manter limpas antes de subir o andamento?</p>
+  </div>
+</section>
+
+<footer><div class="wrap"><span>Metrônomo de Bateria · uso pessoal de estudo</span><span>Barra de espaço inicia e pausa o modo aberto</span></div></footer>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  let ctx = null;
+  const ac = () => ctx || (ctx = new (window.AudioContext || window.webkitAudioContext)());
+
+  const SONS = {
+    bip:     { nome: 'Bip digital',      t: 'osc', w: 'square',   hi: 1500, lo: 1000, d: .045 },
+    seno:    { nome: 'Tom suave',        t: 'osc', w: 'sine',     hi: 1000, lo: 700,  d: .09 },
+    madeira: { nome: 'Bloco de madeira', t: 'osc', w: 'triangle', hi: 1900, lo: 1250, d: .06, drop: .7 },
+    clave:   { nome: 'Clave',            t: 'osc', w: 'sine',     hi: 2600, lo: 2000, d: .05 },
+    cowbell: { nome: 'Cowbell',          t: 'cow', hi: 800, lo: 560, d: .16 },
+    hihat:   { nome: 'Chimbal fechado',  t: 'noise', f: 8000, q: 1.2, type: 'highpass', hi: 1, lo: .6, d: .05 },
+    baqueta: { nome: 'Estalo de baqueta',t: 'noise', f: 3500, q: 2.5, type: 'bandpass', hi: 1, lo: .7, d: .035, fhi: 3500, flo: 2200 },
+    caixa:   { nome: 'Caixa (rimshot)',  t: 'snare', hi: 330, lo: 230, d: .13 },
+    tom:     { nome: 'Tom grave',        t: 'osc', w: 'sine',     hi: 210, lo: 150, d: .16, drop: .45 },
+    bumbo:   { nome: 'Bumbo',            t: 'osc', w: 'sine',     hi: 140, lo: 100, d: .2,  drop: .35 }
+  };
+  const snd = $('snd');
+  for (const k in SONS) snd.add(new Option(SONS[k].nome, k));
+  let volume = 0.8, noiseBuf = null;
+  function noise() {
+    if (!noiseBuf) { const c = ac(), n = c.sampleRate * .3; noiseBuf = c.createBuffer(1, n, c.sampleRate); const d = noiseBuf.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; }
+    return noiseBuf;
+  }
+  function env(g, time, peak, dur) {
+    g.gain.setValueAtTime(Math.max(peak, .0001), time);
+    g.gain.exponentialRampToValueAtTime(.0001, time + dur);
+  }
+  /* hi = true: acento / mão direita (agudo); false: grave */
+  function click(time, hi, vol = 1) {
+    const c = ac(), S = SONS[snd.value], out = c.createGain();
+    out.gain.value = volume * vol; out.connect(c.destination);
+    const f = hi ? S.hi : S.lo;
+    if (S.t === 'osc') {
+      const o = c.createOscillator(), g = c.createGain();
+      o.type = S.w; o.frequency.setValueAtTime(f, time);
+      if (S.drop) o.frequency.exponentialRampToValueAtTime(f * S.drop, time + S.d);
+      env(g, time, .9, S.d); o.connect(g).connect(out); o.start(time); o.stop(time + S.d + .02);
+    } else if (S.t === 'cow') {
+      [f, f * 1.505].forEach(fr => {
+        const o = c.createOscillator(), g = c.createGain();
+        o.type = 'square'; o.frequency.value = fr; env(g, time, .35, S.d);
+        o.connect(g).connect(out); o.start(time); o.stop(time + S.d + .02);
+      });
+    } else if (S.t === 'noise') {
+      const n = c.createBufferSource(), fl = c.createBiquadFilter(), g = c.createGain();
+      n.buffer = noise(); fl.type = S.type; fl.Q.value = S.q;
+      fl.frequency.value = S.fhi ? (hi ? S.fhi : S.flo) : S.f;
+      env(g, time, hi ? S.hi : S.lo, hi ? S.d : S.d * .8);
+      n.connect(fl).connect(g).connect(out); n.start(time); n.stop(time + S.d + .02);
+    } else if (S.t === 'snare') {
+      const n = c.createBufferSource(), fl = c.createBiquadFilter(), g = c.createGain();
+      n.buffer = noise(); fl.type = 'highpass'; fl.frequency.value = 1800;
+      env(g, time, .8, S.d); n.connect(fl).connect(g).connect(out); n.start(time); n.stop(time + S.d + .02);
+      const o = c.createOscillator(), g2 = c.createGain();
+      o.type = 'triangle'; o.frequency.setValueAtTime(f, time); o.frequency.exponentialRampToValueAtTime(f * .6, time + .08);
+      env(g2, time, .8, .09); o.connect(g2).connect(out); o.start(time); o.stop(time + .1);
+    }
+  }
+  /* alerta de troca: sino grave e redondo, sobe de nota a cada batida (3 = lá, 2 = dó, 1 = mi) */
+  function alerta(time, rem) {
+    const c = ac(), f = rem >= 3 ? 440 : rem === 2 ? 523.25 : 659.25;
+    [[f, 'triangle', .9, .30], [f * 2, 'sine', .35, .2], [f * 3.01, 'sine', .12, .12]].forEach(([fr, w, v, d]) => {
+      const o = c.createOscillator(), g = c.createGain();
+      o.type = w; o.frequency.value = fr;
+      env(g, time, v * volume, d);
+      o.connect(g).connect(c.destination); o.start(time); o.stop(time + d + .02);
+    });
+  }
+  /* voz: amostras gravadas (Piper, pt-BR) agendadas no relógio de áudio, sem depender do navegador falar */
+  const VOZ_B64 = {tres:"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",dois:"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",um:"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",troca:"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"};
+  const vozBuf = {}; let vozAtual = null, vozPronta = null;
+  function carregarVoz() {
+    if (vozPronta) return vozPronta;
+    const c = ac();
+    vozPronta = Promise.all(Object.keys(VOZ_B64).map(k => {
+      const bin = atob(VOZ_B64[k]), u = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+      return c.decodeAudioData(u.buffer).then(b => { vozBuf[k] = b; });
+    })).catch(() => {});
+    return vozPronta;
+  }
+  function falar(time, k) {
+    const b = vozBuf[k]; if (!b) return;
+    const c = ac(), src = c.createBufferSource(), g = c.createGain();
+    if (vozAtual) { try { vozAtual.stop(time); } catch (e) {} }
+    src.buffer = b; g.gain.value = Math.min(1.5, volume * 1.6 + .2);
+    src.connect(g).connect(c.destination); src.start(time); vozAtual = src;
+  }
+  try { const sv = localStorage.getItem('metro-som'); if (sv && SONS[sv]) snd.value = sv; const vv = localStorage.getItem('metro-vol'); if (vv) { $('vol').value = vv; volume = vv / 100; } } catch (e) {}
+  snd.onchange = () => { try { localStorage.setItem('metro-som', snd.value); } catch (e) {} ac().resume(); click(ac().currentTime + .02, true); click(ac().currentTime + .4, false, .8); };
+  $('vol').oninput = e => { volume = e.target.value / 100; try { localStorage.setItem('metro-vol', e.target.value); } catch (er) {} };
+  $('snd-test').onclick = () => { ac().resume(); const t = ac().currentTime + .02; click(t, true); click(t + .35, false, .8); click(t + .7, false, .8); };
+
+  /* motor de tempo: agenda com antecedência e dispara efeito visual na hora certa */
+  function Engine(getBpm, onBeat) {
+    let timer = null, next = 0, running = false;
+    const q = [];
+    function schedule() {
+      while (next < ac().currentTime + 0.15) {
+        const t = next;
+        const info = onBeat(t);
+        q.push({ t, info });
+        next += 60 / getBpm();
+      }
+    }
+    function draw() {
+      if (!running) return;
+      const now = ac().currentTime;
+      while (q.length && q[0].t <= now) { const b = q.shift(); if (b.info && b.info.ui) b.info.ui(); }
+      requestAnimationFrame(draw);
+    }
+    return {
+      start() { ac().resume(); running = true; q.length = 0; next = ac().currentTime + 0.08; schedule(); timer = setInterval(schedule, 25); requestAnimationFrame(draw); },
+      stop() { running = false; clearInterval(timer); q.length = 0; },
+      get running() { return running; }
+    };
+  }
+
+  /* ---------- abas ---------- */
+  const tabs = { com: [$('tab-com'), $('p-com')], tre: [$('tab-tre'), $('p-tre')] };
+  function showTab(k) {
+    if (k !== 'com') comum.stop(), setPlayC(false);
+    if (k !== 'tre') treino.stop(), setPlayT(false);
+    for (const key in tabs) {
+      tabs[key][0].setAttribute('aria-selected', key === k);
+      tabs[key][1].classList.toggle('on', key === k);
+    }
+  }
+  tabs.com[0].onclick = () => showTab('com');
+  tabs.tre[0].onclick = () => showTab('tre');
+
+  /* ---------- metrônomo comum ---------- */
+  let cBpm = 120, cBeat = 0;
+  const cSig = $('c-sig'), cAcc = $('c-acc'), beatsEl = $('c-beats');
+  function buildBeats() {
+    const n = +cSig.value; beatsEl.innerHTML = '';
+    for (let i = 0; i < n; i++) { const d = document.createElement('div'); d.className = 'dot' + (i === 0 && cAcc.value === '1' ? ' acc' : ''); d.textContent = i + 1; beatsEl.appendChild(d); }
+    cBeat = 0;
+  }
+  function setC(v) {
+    cBpm = Math.max(50, Math.min(300, Math.round(v)));
+    $('c-bpm').textContent = cBpm; $('c-range').value = cBpm;
+  }
+  const comum = Engine(() => cBpm, t => {
+    const n = +cSig.value, i = cBeat % n; cBeat++;
+    click(t, i === 0 && cAcc.value === '1', i === 0 ? 1 : 0.7);
+    return { ui() { [...beatsEl.children].forEach((d, k) => d.classList.toggle('on', k === i)); } };
+  });
+  function setPlayC(on) { const b = $('c-play'); b.dataset.on = on; b.textContent = on ? 'Parar' : 'Iniciar'; if (!on) [...beatsEl.children].forEach(d => d.classList.remove('on')); }
+  $('c-play').onclick = () => { if (comum.running) { comum.stop(); setPlayC(false); } else { cBeat = 0; comum.start(); setPlayC(true); } };
+  $('c-range').oninput = e => setC(+e.target.value);
+  $('c-minus').onclick = () => setC(cBpm - 1);
+  $('c-plus').onclick = () => setC(cBpm + 1);
+  cSig.onchange = cAcc.onchange = buildBeats;
+  let taps = [];
+  $('c-tap').onclick = () => {
+    const n = performance.now(); if (taps.length && n - taps[taps.length - 1] > 2000) taps = [];
+    taps.push(n); if (taps.length > 6) taps.shift();
+    if (taps.length > 1) setC(60000 / ((taps[taps.length - 1] - taps[0]) / (taps.length - 1)));
+  };
+  buildBeats();
+
+  /* ---------- treino de bateria ---------- */
+  const maxN = $('t-maxn');
+  for (let i = 1; i <= 20; i++) maxN.add(new Option(i, i));
+  const minN = $('t-minn');
+  for (let i = 1; i <= 20; i++) minN.add(new Option(i, i));
+  minN.value = 1; maxN.value = 20;
+  try { const m = localStorage.getItem('metro-minn'); if (m) minN.value = m; } catch (e) {}
+  let st;
+  function reset() {
+    const s = Math.max(20, Math.min(400, +$('t-start').value || 100));
+    st = { bpm: s, n: +minN.value, side: 'D', idx: 1, done: false, hits: 0 };
+    paint(null);
+    $('t-bpm').textContent = s; $('t-bar').style.width = '0';
+    $('t-flash').classList.remove('on');
+  }
+  function paint(hit) {
+    $('t-bpm').textContent = st.bpm;
+    $('t-seq').textContent = st.n + ' / ' + maxN.value;
+    $('t-per').textContent = st.n;
+    const lo = +$('t-start').value, hi = Math.max(+$('t-max').value, lo + 1);
+    $('t-bar').style.width = Math.min(100, ((st.bpm - lo) / (hi - lo)) * 100) + '%';
+    ['D', 'E'].forEach(s => {
+      $('pad-' + s).classList.toggle('hit', !!hit && hit.side === s);
+      $('cnt-' + s).textContent = hit && hit.side === s ? hit.idx + ' / ' + hit.n : '–';
+    });
+    $('t-hit').textContent = hit ? hit.total + ' / ' + hit.n * 2 : '–';
+  }
+  const treino = Engine(() => st.bpm, t => {
+    if (st.done) return null;
+    const cur = { bpm: st.bpm, n: st.n, side: st.side, idx: st.idx, total: (st.side === 'E' ? st.n : 0) + st.idx };
+    const rem = st.n - st.idx + 1, wm = $('t-warn').value;
+    const warn = rem <= 3 && wm !== 'off';
+    const beep = warn && (wm === 'bip' || wm === 'ambos');
+    const vozOn = wm === 'voz' || wm === 'ambos';
+    if (warn && vozOn) falar(t, ['', 'um', 'dois', 'tres'][rem]);
+    else if (vozOn && st.hits > 0 && st.idx === 1) falar(t, 'troca');
+    st.hits++;
+    if (beep) alerta(t, rem); else click(t, cur.side === 'D', cur.idx === 1 ? 1 : 0.8);
+    const maxn = +maxN.value, inc = +$('t-inc').value, hi = +$('t-max').value;
+    let levelUp = false, finished = false;
+    if (++st.idx > st.n) {
+      st.idx = 1;
+      if (st.side === 'D') st.side = 'E';
+      else {
+        st.side = 'D';
+        if (++st.n > maxn) {
+          st.n = +minN.value; st.bpm += inc; levelUp = true;
+          if (st.bpm > hi) { finished = true; st.done = true; st.bpm -= inc; }
+        }
+      }
+    }
+    const snap = { bpm: st.bpm, n: st.n };
+    return { ui() {
+      paint(cur);
+      if (finished) { treino.stop(); setPlayT(false); flash('Treino concluído em ' + cur.bpm + ' BPM. Parabéns!'); $('t-msg').textContent = 'Fim do treino.'; return; }
+      $('t-msg').textContent = 'Sequência ' + cur.n + ': ' + cur.n + ' batida' + (cur.n > 1 ? 's' : '') + ' em cada mão.';
+      if (levelUp) { flash('Sobe para ' + snap.bpm + ' BPM'); }
+    } };
+  });
+  let ft;
+  function flash(m) { const f = $('t-flash'); f.textContent = m; f.classList.add('on'); clearTimeout(ft); ft = setTimeout(() => f.classList.remove('on'), 3500); }
+  function setPlayT(on) { const b = $('t-play'); b.dataset.on = on; b.textContent = on ? 'Pausar' : (st && st.done ? 'Iniciar treino' : 'Iniciar treino'); }
+  $('t-play').onclick = () => {
+    if (treino.running) { treino.stop(); setPlayT(false); $('t-msg').textContent = 'Pausado. Retoma de onde parou.'; return; }
+    if (st.done || (st.n === +minN.value && st.idx === 1 && st.side === 'D')) reset();
+    setPlayT(true); carregarVoz().then(() => { if (!treino.running && $('t-play').dataset.on === 'true') treino.start(); });
+  };
+  $('t-reset').onclick = () => { treino.stop(); setPlayT(false); reset(); $('t-msg').textContent = 'Escolha o BPM inicial e comece.'; };
+  ['t-start', 't-max'].forEach(id => $(id).addEventListener('input', () => { if (!treino.running) reset(); }));
+  minN.addEventListener('change', () => {
+    if (+maxN.value < +minN.value) maxN.value = minN.value;
+    try { localStorage.setItem('metro-minn', minN.value); } catch (e) {}
+    if (!treino.running) reset();
+  });
+  maxN.addEventListener('change', () => {
+    if (+minN.value > +maxN.value) { minN.value = maxN.value; try { localStorage.setItem('metro-minn', minN.value); } catch (e) {} }
+    if (!treino.running) reset();
+  });
+  reset();
+
+  /* espaço inicia/pausa o modo aberto */
+  document.addEventListener('keydown', e => {
+    if (e.code !== 'Space' || /INPUT|SELECT|TEXTAREA|BUTTON/.test(e.target.tagName)) return;
+    e.preventDefault();
+    ($('p-com').classList.contains('on') ? $('c-play') : $('t-play')).click();
+  });
+
+  /* barra de progresso de rolagem */
+  addEventListener('scroll', () => {
+    const h = document.documentElement; $('prog').style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
