@@ -230,8 +230,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         </div>
         <div>
           <div class="pads">
-            <div class="pad" id="pad-D"><span>Mão direita</span><b>D</b><i class="cnt" id="cnt-D">–</i></div>
             <div class="pad" id="pad-E"><span>Mão esquerda</span><b>E</b><i class="cnt" id="cnt-E">–</i></div>
+            <div class="pad" id="pad-D"><span>Mão direita</span><b>D</b><i class="cnt" id="cnt-D">–</i></div>
           </div>
           <div class="stats">
             <div class="stat"><span class="label">Sequência</span><strong id="t-seq">1 / 20</strong></div>
@@ -435,7 +435,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
-  const VERSAO = '2026-10-16-3';
+  const VERSAO = '2026-10-16-4';
   try {
     fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
       const m = t.match(/const VERSAO = '([^']+)'/);
