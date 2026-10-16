@@ -81,6 +81,14 @@ select,input[type=number]{font:inherit;font-size:1rem;padding:10px 12px;border:1
 
 /* histórico */
 .hist-wrap{grid-column:1}
+.tempo{border-top:2px solid var(--navy);padding-top:14px;margin-bottom:34px}
+.tempo-num{font-size:clamp(2.6rem,6vw,3.6rem);font-weight:800;letter-spacing:-.065em;line-height:1.1;color:var(--primary);font-variant-numeric:tabular-nums;margin-top:6px}
+.rec{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--primary)}
+.rec:not([hidden]){animation:pisca 1.4s ease-in-out infinite}
+@keyframes pisca{50%{opacity:.35}}
+#tempo-dias{list-style:none;margin-top:10px}
+#tempo-dias li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:.9rem;color:var(--note);font-variant-numeric:tabular-nums}
+#tempo-dias li b{color:var(--navy);font-weight:700}
 .hist{margin-top:0;border-top:2px solid var(--navy);padding-top:14px}
 .hist-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .link{font-size:.8rem;font-weight:700;color:var(--primary);text-decoration:underline;text-underline-offset:3px;padding:4px 0}
@@ -240,6 +248,14 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
           </div>
         </div>
         <div class="hist-wrap">
+          <div class="tempo">
+            <div class="hist-head">
+              <span class="label">Tempo estudado hoje</span>
+              <span class="rec" id="rec" hidden>● contando</span>
+            </div>
+            <div class="tempo-num" id="tempo-hoje">0 min</div>
+            <ol id="tempo-dias" aria-label="Tempo estudado nos dias anteriores"></ol>
+          </div>
           <div class="hist">
             <div class="hist-head">
               <span class="label">Histórico de BPM · últimos 10</span>
@@ -435,7 +451,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
-  const VERSAO = '2026-10-16-4';
+  const VERSAO = '2026-10-16-5';
   try {
     fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
       const m = t.match(/const VERSAO = '([^']+)'/);
@@ -545,6 +561,41 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       if (levelUp) { registrar(snap.bpm); flash('Sobe para ' + snap.bpm + ' BPM'); }
     } };
   });
+  /* ---------- tempo estudado por dia ---------- */
+  const TKEY = 'metro-tempo';
+  const hojeKey = (d = new Date()) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  function lerTempo() { try { return JSON.parse(localStorage.getItem(TKEY)) || {}; } catch (e) { return {}; } }
+  function fmtTempo(seg) {
+    const m = Math.floor(seg / 60), h = Math.floor(m / 60);
+    if (h > 0) return h + ' h ' + String(m % 60).padStart(2, '0') + ' min';
+    return m < 1 ? (seg > 0 ? 'menos de 1 min' : '0 min') : m + ' min';
+  }
+  function pintarTempo() {
+    const t = lerTempo();
+    $('tempo-hoje').textContent = fmtTempo(t[hojeKey()] || 0);
+    const ul = $('tempo-dias'); ul.innerHTML = '';
+    Object.keys(t).filter(k => k !== hojeKey()).sort().reverse().slice(0, 6).forEach(k => {
+      const [a, m, d] = k.split('-'), li = document.createElement('li');
+      li.innerHTML = '<span>' + d + '/' + m + '/' + a + '</span><b>' + fmtTempo(t[k]) + '</b>';
+      ul.appendChild(li);
+    });
+  }
+  let ultimo = Date.now();
+  setInterval(() => {
+    const agora = Date.now(), ativo = comum.running || treino.running;
+    $('rec').hidden = !ativo;
+    if (ativo) {
+      const t = lerTempo(), k = hojeKey();
+      t[k] = (t[k] || 0) + Math.min(3, (agora - ultimo) / 1000);
+      const chaves = Object.keys(t).sort();
+      while (chaves.length > 60) delete t[chaves.shift()];
+      try { localStorage.setItem(TKEY, JSON.stringify(t)); } catch (e) {}
+      pintarTempo();
+    }
+    ultimo = agora;
+  }, 1000);
+  pintarTempo();
+
   /* ---------- histórico de BPM ---------- */
   const HKEY = 'metro-hist';
   try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
