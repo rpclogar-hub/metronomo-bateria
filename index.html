@@ -451,7 +451,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
-  const VERSAO = '2026-10-16-5';
+  const VERSAO = '2026-10-16-6';
   try {
     fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
       const m = t.match(/const VERSAO = '([^']+)'/);
@@ -641,6 +641,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     if (+minN.value > +maxN.value) { minN.value = maxN.value; try { localStorage.setItem('metro-minn', minN.value); } catch (e) {} }
     if (!treino.running) reset();
   });
+  { const h = lerHist(); if (h.length) $('t-start').value = h[0].bpm; }
   reset(); pintarHist();
 
   /* espaço inicia/pausa o modo aberto */
