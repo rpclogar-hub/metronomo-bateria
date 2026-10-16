@@ -79,6 +79,21 @@ select,input[type=number]{font:inherit;font-size:1rem;padding:10px 12px;border:1
 .ghost{padding:15px 26px;border:1px solid var(--primary);border-radius:999px;font-weight:700;color:var(--primary);background:#fff}
 .ghost:hover{background:var(--mist)}
 
+/* histórico */
+.hist{margin-top:34px;border-top:2px solid var(--navy);padding-top:14px}
+.hist-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.link{font-size:.8rem;font-weight:700;color:var(--primary);text-decoration:underline;text-underline-offset:3px;padding:4px 0}
+#h-list{list-style:none;margin-top:8px}
+#h-list li{display:grid;grid-template-columns:34px 1fr auto auto;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+#h-list em{font-style:normal;font-weight:800;font-size:.72rem;color:var(--primary)}
+#h-list b{font-size:1.35rem;letter-spacing:-.05em;color:var(--navy);font-variant-numeric:tabular-nums}
+#h-list b small{font-size:.7rem;letter-spacing:.08em;color:var(--note);margin-left:4px}
+#h-list time{font-size:.85rem;color:var(--note);font-variant-numeric:tabular-nums}
+#h-list li:first-child b{color:var(--primary)}
+#h-list .use{font-size:.78rem;font-weight:700;color:var(--primary);border:1px solid var(--line);border-radius:3px;padding:6px 10px;background:#fff}
+#h-list .use:hover{background:var(--mist)}
+.h-vazio{padding:14px 0;color:var(--note);font-size:.9rem}
+@media(max-width:560px){#h-list li{grid-template-columns:28px 1fr auto;}#h-list time{grid-column:2;grid-row:2;font-size:.78rem}#h-list .use{grid-column:3;grid-row:1/3}}
 /* indicadores */
 .beats{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
 .dot{width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:#fff;display:grid;place-items:center;font-weight:800;color:var(--note);transition:.08s}
@@ -158,48 +173,12 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     </div>
 
     <div class="tabs" role="tablist">
-      <button class="tab" role="tab" id="tab-com" aria-selected="true" aria-controls="p-com">Metrônomo comum</button>
-      <button class="tab" role="tab" id="tab-tre" aria-selected="false" aria-controls="p-tre">Treino de bateria</button>
-    </div>
-
-    <!-- COMUM -->
-    <div class="panel on" id="p-com" role="tabpanel" aria-labelledby="tab-com">
-      <div class="grid">
-        <div>
-          <div class="bpm-box">
-            <div class="label">Andamento</div>
-            <div class="bpm-num"><span id="c-bpm">120</span><small>BPM</small></div>
-            <div class="row">
-              <button class="step" id="c-minus" aria-label="Diminuir 1 BPM">−</button>
-              <input type="range" id="c-range" min="50" max="300" value="120" aria-label="BPM">
-              <button class="step" id="c-plus" aria-label="Aumentar 1 BPM">+</button>
-            </div>
-          </div>
-          <div class="btns">
-            <button class="cta" id="c-play" data-on="false">Iniciar</button>
-            <button class="ghost" id="c-tap">Tap tempo</button>
-          </div>
-        </div>
-        <div>
-          <div class="label">Compasso</div>
-          <div class="opts" style="margin-top:10px">
-            <div class="opt">
-              <label class="label" for="c-sig">Tempos por compasso</label>
-              <select id="c-sig"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>
-            </div>
-            <div class="opt">
-              <label class="label" for="c-acc">Acento no 1</label>
-              <select id="c-acc"><option value="1" selected>Ligado</option><option value="0">Desligado</option></select>
-            </div>
-          </div>
-          <div class="label" style="margin-top:28px">Batida</div>
-          <div class="beats" id="c-beats" style="margin-top:10px"></div>
-        </div>
-      </div>
+      <button class="tab" role="tab" id="tab-tre" aria-selected="true" aria-controls="p-tre">Treino de bateria</button>
+      <button class="tab" role="tab" id="tab-com" aria-selected="false" aria-controls="p-com">Metrônomo comum</button>
     </div>
 
     <!-- TREINO -->
-    <div class="panel" id="p-tre" role="tabpanel" aria-labelledby="tab-tre">
+    <div class="panel on" id="p-tre" role="tabpanel" aria-labelledby="tab-tre">
       <div class="grid">
         <div>
           <div class="bpm-box">
@@ -246,6 +225,13 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
             <button class="cta" id="t-play" data-on="false">Iniciar treino</button>
             <button class="ghost" id="t-reset">Reiniciar</button>
           </div>
+          <div class="hist">
+            <div class="hist-head">
+              <span class="label">Histórico de BPM · últimos 10</span>
+              <button class="link" id="h-clear" type="button">Limpar</button>
+            </div>
+            <ol id="h-list" aria-live="polite"></ol>
+          </div>
         </div>
         <div>
           <div class="pads">
@@ -260,6 +246,42 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         </div>
       </div>
     </div>
+    <!-- COMUM -->
+    <div class="panel" id="p-com" role="tabpanel" aria-labelledby="tab-com">
+      <div class="grid">
+        <div>
+          <div class="bpm-box">
+            <div class="label">Andamento</div>
+            <div class="bpm-num"><span id="c-bpm">120</span><small>BPM</small></div>
+            <div class="row">
+              <button class="step" id="c-minus" aria-label="Diminuir 1 BPM">−</button>
+              <input type="range" id="c-range" min="50" max="300" value="120" aria-label="BPM">
+              <button class="step" id="c-plus" aria-label="Aumentar 1 BPM">+</button>
+            </div>
+          </div>
+          <div class="btns">
+            <button class="cta" id="c-play" data-on="false">Iniciar</button>
+            <button class="ghost" id="c-tap">Tap tempo</button>
+          </div>
+        </div>
+        <div>
+          <div class="label">Compasso</div>
+          <div class="opts" style="margin-top:10px">
+            <div class="opt">
+              <label class="label" for="c-sig">Tempos por compasso</label>
+              <select id="c-sig"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>
+            </div>
+            <div class="opt">
+              <label class="label" for="c-acc">Acento no 1</label>
+              <select id="c-acc"><option value="1" selected>Ligado</option><option value="0">Desligado</option></select>
+            </div>
+          </div>
+          <div class="label" style="margin-top:28px">Batida</div>
+          <div class="beats" id="c-beats" style="margin-top:10px"></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -500,16 +522,41 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       paint(cur);
       if (finished) { treino.stop(); setPlayT(false); flash('Treino concluído em ' + cur.bpm + ' BPM. Parabéns!'); $('t-msg').textContent = 'Fim do treino.'; return; }
       $('t-msg').textContent = 'Sequência ' + cur.n + ': ' + cur.n + ' batida' + (cur.n > 1 ? 's' : '') + ' em cada mão.';
-      if (levelUp) { flash('Sobe para ' + snap.bpm + ' BPM'); }
+      if (levelUp) { registrar(snap.bpm); flash('Sobe para ' + snap.bpm + ' BPM'); }
     } };
   });
+  /* ---------- histórico de BPM ---------- */
+  const HKEY = 'metro-hist';
+  function lerHist() { try { return JSON.parse(localStorage.getItem(HKEY)) || []; } catch (e) { return []; } }
+  function gravarHist(l) { try { localStorage.setItem(HKEY, JSON.stringify(l)); } catch (e) {} }
+  function fmt(ts) {
+    const d = new Date(ts), p = n => String(n).padStart(2, '0');
+    return p(d.getDate()) + '/' + p(d.getMonth() + 1) + '/' + d.getFullYear() + ' · ' + p(d.getHours()) + ':' + p(d.getMinutes());
+  }
+  function pintarHist() {
+    const l = lerHist(), ul = $('h-list'); ul.innerHTML = '';
+    if (!l.length) { ul.innerHTML = '<li class="h-vazio" style="display:block">Nenhum treino registrado ainda.</li>'; return; }
+    l.forEach((h, i) => {
+      const li = document.createElement('li');
+      li.innerHTML = '<em>' + String(i + 1).padStart(2, '0') + '</em><b>' + h.bpm + '<small>BPM</small></b><time datetime="' + new Date(h.ts).toISOString() + '">' + fmt(h.ts) + '</time><button class="use" type="button">Usar</button>';
+      li.querySelector('.use').onclick = () => { if (treino.running) return; $('t-start').value = h.bpm; reset(); $('t-msg').textContent = 'BPM inicial ajustado para ' + h.bpm + '.'; };
+      ul.appendChild(li);
+    });
+  }
+  function registrar(bpm) {
+    const l = lerHist();
+    if (l.length && l[0].bpm === bpm) l[0].ts = Date.now(); else l.unshift({ bpm, ts: Date.now() });
+    gravarHist(l.slice(0, 10)); pintarHist();
+  }
+  $('h-clear').onclick = () => { gravarHist([]); pintarHist(); };
+
   let ft;
   function flash(m) { const f = $('t-flash'); f.textContent = m; f.classList.add('on'); clearTimeout(ft); ft = setTimeout(() => f.classList.remove('on'), 3500); }
   function setPlayT(on) { const b = $('t-play'); b.dataset.on = on; b.textContent = on ? 'Pausar' : (st && st.done ? 'Iniciar treino' : 'Iniciar treino'); }
   $('t-play').onclick = () => {
     if (treino.running) { treino.stop(); setPlayT(false); $('t-msg').textContent = 'Pausado. Retoma de onde parou.'; return; }
     if (st.done || (st.n === +minN.value && st.idx === 1 && st.side === 'D')) reset();
-    setPlayT(true); carregarVoz().then(() => { if (!treino.running && $('t-play').dataset.on === 'true') treino.start(); });
+    registrar(st.bpm); setPlayT(true); carregarVoz().then(() => { if (!treino.running && $('t-play').dataset.on === 'true') treino.start(); });
   };
   $('t-reset').onclick = () => { treino.stop(); setPlayT(false); reset(); $('t-msg').textContent = 'Escolha o BPM inicial e comece.'; };
   ['t-start', 't-max'].forEach(id => $(id).addEventListener('input', () => { if (!treino.running) reset(); }));
@@ -522,7 +569,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     if (+minN.value > +maxN.value) { minN.value = maxN.value; try { localStorage.setItem('metro-minn', minN.value); } catch (e) {} }
     if (!treino.running) reset();
   });
-  reset();
+  reset(); pintarHist();
 
   /* espaço inicia/pausa o modo aberto */
   document.addEventListener('keydown', e => {
