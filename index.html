@@ -214,8 +214,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
             <div class="opt">
               <label class="label" for="t-warn">Aviso de troca de mão</label>
               <select id="t-warn">
-                <option value="bip" selected>Alerta nas 3 últimas</option>
-                <option value="voz">Voz 3, 2, 1, troca</option>
+                <option value="bip">Alerta nas 3 últimas</option>
+                <option value="voz" selected>Voz 3, 2, 1, troca</option>
                 <option value="ambos">Alerta + voz</option>
                 <option value="off">Sem aviso</option>
               </select>
@@ -471,8 +471,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   for (let i = 1; i <= 20; i++) maxN.add(new Option(i, i));
   const minN = $('t-minn');
   for (let i = 1; i <= 20; i++) minN.add(new Option(i, i));
-  minN.value = 1; maxN.value = 20;
-  try { const m = localStorage.getItem('metro-minn'); if (m) minN.value = m; } catch (e) {}
+  minN.value = 3; maxN.value = 15;
   let st;
   function reset() {
     const s = Math.max(20, Math.min(400, +$('t-start').value || 100));
