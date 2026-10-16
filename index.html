@@ -80,7 +80,8 @@ select,input[type=number]{font:inherit;font-size:1rem;padding:10px 12px;border:1
 .ghost:hover{background:var(--mist)}
 
 /* histórico */
-.hist{margin-top:34px;border-top:2px solid var(--navy);padding-top:14px}
+.hist-wrap{grid-column:1}
+.hist{margin-top:0;border-top:2px solid var(--navy);padding-top:14px}
 .hist-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .link{font-size:.8rem;font-weight:700;color:var(--primary);text-decoration:underline;text-underline-offset:3px;padding:4px 0}
 #h-list{list-style:none;margin-top:8px}
@@ -133,6 +134,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 @media(max-width:820px){
   .grid{grid-template-columns:1fr}
+  .hist-wrap{margin-top:0}
   .steps{grid-template-columns:1fr}
   .s+.s{border-left:0;border-top:1px solid var(--line);padding-left:0;margin-top:20px;padding-top:20px}
   .scene{padding:52px 20px}.hero{padding:52px 20px 60px}
@@ -225,13 +227,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
             <button class="cta" id="t-play" data-on="false">Iniciar treino</button>
             <button class="ghost" id="t-reset">Reiniciar</button>
           </div>
-          <div class="hist">
-            <div class="hist-head">
-              <span class="label">Histórico de BPM · últimos 10</span>
-              <button class="link" id="h-clear" type="button">Limpar</button>
-            </div>
-            <ol id="h-list" aria-live="polite"></ol>
-          </div>
         </div>
         <div>
           <div class="pads">
@@ -242,6 +237,15 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
             <div class="stat"><span class="label">Sequência</span><strong id="t-seq">1 / 20</strong></div>
             <div class="stat"><span class="label">Batida</span><strong id="t-hit">–</strong></div>
             <div class="stat"><span class="label">Por mão</span><strong id="t-per">1</strong></div>
+          </div>
+        </div>
+        <div class="hist-wrap">
+          <div class="hist">
+            <div class="hist-head">
+              <span class="label">Histórico de BPM · últimos 10</span>
+              <button class="link" id="h-clear" type="button">Limpar</button>
+            </div>
+            <ol id="h-list" aria-live="polite"></ol>
           </div>
         </div>
       </div>
@@ -416,11 +420,19 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       requestAnimationFrame(draw);
     }
     return {
-      start() { ac().resume(); running = true; q.length = 0; next = ac().currentTime + 0.08; schedule(); timer = setInterval(schedule, 25); requestAnimationFrame(draw); },
-      stop() { running = false; clearInterval(timer); q.length = 0; },
+      start() { ac().resume(); running = true; setTimeout(travarTela, 0); q.length = 0; next = ac().currentTime + 0.08; schedule(); timer = setInterval(schedule, 25); requestAnimationFrame(draw); },
+      stop() { running = false; clearInterval(timer); q.length = 0; setTimeout(soltarTela, 0); },
       get running() { return running; }
     };
   }
+
+  /* mantém a tela ligada enquanto algum modo estiver tocando */
+  let wake = null;
+  async function travarTela() {
+    try { if ('wakeLock' in navigator && !wake && (comum.running || treino.running)) { wake = await navigator.wakeLock.request('screen'); wake.addEventListener('release', () => { wake = null; }); } } catch (e) {}
+  }
+  function soltarTela() { try { if (wake && !comum.running && !treino.running) { wake.release(); wake = null; } } catch (e) {} }
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* ---------- abas ---------- */
   const tabs = { com: [$('tab-com'), $('p-com')], tre: [$('tab-tre'), $('p-tre')] };
