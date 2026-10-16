@@ -527,6 +527,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   });
   /* ---------- histórico de BPM ---------- */
   const HKEY = 'metro-hist';
+  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
   function lerHist() { try { return JSON.parse(localStorage.getItem(HKEY)) || []; } catch (e) { return []; } }
   function gravarHist(l) { try { localStorage.setItem(HKEY, JSON.stringify(l)); } catch (e) {} }
   function fmt(ts) {
