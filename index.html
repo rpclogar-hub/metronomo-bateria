@@ -124,7 +124,8 @@ select,input[type=number]{font:inherit;font-size:1rem;padding:10px 12px;border:1
 @media(max-width:560px){#h-list li,#c-h-list li{grid-template-columns:28px 1fr auto;}#h-list time,#c-h-list time{grid-column:2;grid-row:2;font-size:.78rem}#h-list .use,#c-h-list .use{grid-column:3;grid-row:1/3}}
 /* indicadores */
 .beats{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
-.dot{width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:#fff;display:grid;place-items:center;font-weight:800;color:var(--note);transition:.08s}
+.dot{position:relative;margin-bottom:16px;width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:#fff;display:grid;place-items:center;font-weight:800;color:var(--note);transition:.08s}
+.beats .dot .sd{bottom:-14px}
 .dot.on{background:var(--primary);border-color:var(--primary);color:#fff;transform:scale(1.12)}
 .dot.acc.on{background:var(--navy);border-color:var(--navy)}
 
@@ -171,7 +172,18 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 /* metrônomo palco */
 .pfaixa{display:grid;gap:12px;margin-top:12px}
 .pfaixa i{height:78px;border-radius:10px;border:2px solid var(--line);background:#fff;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:1.5rem;color:var(--note)}
-.pfaixa i{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.opts2{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:420px}
+.opts2 select{width:100%;min-width:0}
+.sd{position:absolute;left:0;right:0;bottom:6px;display:flex;justify-content:center;gap:5px;pointer-events:none;font-style:normal}
+.sd u{display:block;width:6px;height:6px;border-radius:50%;background:#c3cbea;text-decoration:none}
+.sd u.on{background:#ff5100}
+.pfaixa i.on .sd u{background:#ffffff66}
+.pfaixa i.on .sd u.on{background:#fff}
+.palco .sd u{background:#3a3e78}
+.palco .pfaixa i.on .sd u{background:#ffffff55}
+.palco .pfaixa i.on .sd u.on{background:#fff}
+.palco .sd u.on{background:#fb923c}
+.pfaixa i{position:relative;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .pfaixa i.ac{box-shadow:inset 0 5px 0 #ff5100}
 .pfaixa i.on{background:var(--primary);border-color:var(--primary);color:#fff}
 .pfaixa i.on.um{background:#ff5100;border-color:#ff5100}
@@ -198,10 +210,34 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .palco .seg button[aria-pressed=true]{background:linear-gradient(90deg,#ff5100,#fb923c);border-color:transparent;color:#fff;box-shadow:0 6px 18px #ff510040}
 .p-opts{display:grid;gap:10px}
 .p-foot{display:flex;justify-content:center}
+.p-acts{display:flex;align-items:center;gap:8px;flex:none}
+.p-o select:disabled,.opt select:disabled{opacity:.4}
+.p-tema{width:36px;height:36px;border-radius:50%;border:1px solid #3a3d6e;color:#fb923c;background:transparent;display:grid;place-items:center;padding:0}
+.p-tema .lua{display:none}
+.palco.claro .p-tema .sol{display:none}.palco.claro .p-tema .lua{display:block}
+.palco.claro{background:#eef1ff;color:#0e0f2c}
+.palco.claro .p-top{color:#4a5072}
+.palco.claro .p-sair,.palco.claro .p-tema{border-color:#cbd4f1;color:#1b1bf2;background:#fff}
+.palco.claro .p-step{border-color:#cbd4f1;color:#1b1bf2;background:#fff}
+.palco.claro .pfaixa i{background:#fff;border-color:#cbd4f1;color:#4a5072}
+.palco.claro .pfaixa i.on{background:#1b1bf2;border-color:#1b1bf2;color:#fff}
+.palco.claro .pfaixa i.on.um{background:#ff5100;border-color:#ff5100}
+.palco.claro .seg button:not([aria-pressed=true]){border-color:#1b1bf2;color:#1b1bf2;background:#fff}
+.palco.claro .seg button:not([aria-pressed=true]):hover{background:#e9edff}
+.palco.claro .p-o label{color:#4a5072}
+.palco.claro .p-o select,.palco.claro .p-o input{background:#fff;border-color:#cbd4f1;color:#0e0f2c}
+.palco.claro .p-foot button{border-color:#cbd4f1;color:#4a5072}
+.palco.claro .p-foot button:hover{background:#e9edff}
+.palco.claro .sd u{background:#c3cbea}
+.palco.claro .sd u.on{background:#ff5100}
+.palco.claro .pfaixa i.on .sd u{background:#ffffff66}
+.palco.claro .pfaixa i.on .sd u.on{background:#fff}
+.palco.claro input[type=range]{accent-color:#ff5100}
 #pp-mt-rows[data-off=true]{opacity:.4;pointer-events:none}
 @media(max-height:700px){
   .palco{gap:8px;padding:10px 16px}
   .p-sair{padding:7px 16px}
+  .p-tema{width:32px;height:32px}
   .p-step{width:40px;height:40px}
   .p-mid small{margin-top:0}
   .p-mid input[type=range]{height:26px;margin-top:2px}
@@ -218,6 +254,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .p-bot .cta{padding:8px 28px;font-size:.95rem}
   .palco .seg button{padding:7px 4px}
   .p-sair{padding:5px 14px}
+  .p-tema{width:30px;height:30px}
   .p-opts{gap:6px}.p-row{gap:8px}.p-o{gap:3px}
   .p-foot button{padding:4px 14px}
   .palco .pfaixa{min-height:36px}
@@ -316,14 +353,24 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
               <select id="p-acc"><option value="1" selected>Só no 1</option><option value="0">Sem acento</option><option value="13">No 1 e no 3</option><option value="24">No 2 e no 4</option><option value="g2">De 2 em 2</option><option value="g3">De 3 em 3</option><option value="all">Todos os tempos</option><option value="custom">Personalizado</option></select>
             </div>
           </div>
-          <div class="opts">
+          <div class="opts opts2">
             <div class="opt">
-              <label class="label" for="p-bri">Brilho do flash</label>
-              <select id="p-bri"><option value="6px">Baixo</option><option value="10px">Médio</option><option value="16px" selected>Alto</option></select>
+              <label class="label" for="p-sub">Subdivisão</label>
+              <select id="p-sub"><option value="1" selected>Nenhuma</option><option value="2">Colcheias</option><option value="3">Tercinas</option><option value="4">Semicolcheias</option><option value="5">Quintinas</option><option value="6">Sextinas</option></select>
             </div>
+            <div class="opt">
+              <label class="label" for="p-subvol">Volume subdiv.</label>
+              <select id="p-subvol"><option value="b">Baixo</option><option value="m" selected>Médio</option><option value="a">Alto</option></select>
+            </div>
+          </div>
+          <div class="opts">
             <div class="opt">
               <label class="label" for="p-mold">Moldura piscando</label>
               <select id="p-mold"><option value="1" selected>Ligada</option><option value="0">Desligada</option></select>
+            </div>
+            <div class="opt">
+              <label class="label" for="p-bri">Espessura da moldura</label>
+              <select id="p-bri"><option value="6px">Fina</option><option value="10px">Média</option><option value="16px" selected>Grossa</option></select>
             </div>
             <div class="opt">
               <label class="label" for="p-lat">Atraso do visual (ms)</label>
@@ -452,6 +499,16 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
               <select id="c-acc"><option value="1" selected>Ligado</option><option value="0">Desligado</option></select>
             </div>
           </div>
+          <div class="opts opts2">
+            <div class="opt">
+              <label class="label" for="c-sub">Subdivisão</label>
+              <select id="c-sub"><option value="1" selected>Nenhuma</option><option value="2">Colcheias</option><option value="3">Tercinas</option><option value="4">Semicolcheias</option><option value="5">Quintinas</option><option value="6">Sextinas</option></select>
+            </div>
+            <div class="opt">
+              <label class="label" for="c-subvol">Volume subdiv.</label>
+              <select id="c-subvol"><option value="b">Baixo</option><option value="m" selected>Médio</option><option value="a">Alto</option></select>
+            </div>
+          </div>
           <div class="label" style="margin-top:28px">Batida</div>
           <div class="beats" id="c-beats" style="margin-top:10px"></div>
           <div class="mt">
@@ -499,8 +556,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <p class="lead">Feito para ensaio e show: a batida acende em blocos grandes, a batida 1 se destaca em laranja e o modo palco ocupa a tela toda, com fundo escuro.</p>
     <div class="steps">
       <div class="s"><em>01</em><h3>Retorno</h3><p>Escolha Som e visual ou Só visual. Em Só visual o metrônomo fica totalmente mudo, ideal para tocar sem clique no ouvido.</p></div>
-      <div class="s"><em>02</em><h3>Faixa de batidas</h3><p>Cada tempo do compasso é um bloco grande. Os tempos com acento acendem em laranja e os outros em azul. Escolha o acento no campo Acento ou toque direto num bloco para marcar ou desmarcar.</p></div>
-      <div class="s"><em>03</em><h3>Modo palco</h3><p>Abre a tela cheia, com o BPM enorme e a moldura piscando. Se o visual chegar adiantado em relação ao som, por exemplo com fone Bluetooth, aumente o atraso do visual.</p></div>
+      <div class="s"><em>02</em><h3>Faixa de batidas</h3><p>Os tempos com acento acendem em laranja e os outros em azul. Toque num bloco para marcar o acento, escolha o compasso em fórmula e use a subdivisão: os pontinhos acendem entre os tempos.</p></div>
+      <div class="s"><em>03</em><h3>Modo palco</h3><p>Abre a tela cheia, com o BPM enorme e a moldura piscando. O botão de sol e lua alterna entre o modo escuro e o claro. Se o visual chegar adiantado em relação ao som, por exemplo com fone Bluetooth, aumente o atraso.</p></div>
     </div>
     <p class="question">Você consegue bater junto com a luz sem ouvir o clique?</p>
   </div>
@@ -513,7 +570,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <p class="lead">O metrônomo dá um clique a cada tempo do compasso. Ajuste o andamento, defina quantos tempos tem o compasso e, se quiser, programe o BPM para subir ou descer sozinho.</p>
     <div class="steps">
       <div class="s"><em>01</em><h3>Andamento</h3><p>Use o deslizador ou os botões − e + para escolher de 50 a 400 BPM. No Tap tempo, toque no ritmo desejado e o metrônomo calcula o BPM.</p></div>
-      <div class="s"><em>02</em><h3>Compasso</h3><p>Em "Tempos por compasso", escolha de 1 a 8. Com "Acento no 1" ligado, a primeira batida de cada compasso soa mais forte, e os círculos de Batida acendem acompanhando.</p></div>
+      <div class="s"><em>02</em><h3>Compasso e subdivisão</h3><p>Em "Tempos por compasso", escolha de 1 a 8 e ligue o acento no 1. Em "Subdivisão", escolha colcheias, tercinas ou outras: cliques mais fracos e pontinhos marcam o que acontece entre os tempos.</p></div>
       <div class="s"><em>03</em><h3>Mudança de tempo</h3><p>Em Aumentar ou Diminuir, defina quantos BPM mudar, a cada quantos compassos e até qual BPM. O metrônomo muda sozinho e para no limite. Em Off, o andamento fica fixo.</p></div>
     </div>
     <div class="ex"><strong>Exemplo:</strong> começa em 100 BPM · Aumentar 5 BPM · a cada 10 compassos · até 140 BPM &nbsp;→&nbsp; 100 &nbsp;→&nbsp; 105 &nbsp;→&nbsp; 110 &nbsp;→ … →&nbsp; 140 BPM</div>
@@ -537,7 +594,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 </section>
 
 <div class="palco" id="palco" hidden role="dialog" aria-label="Modo palco">
-  <div class="p-top"><span id="pp-info">Metrônomo palco · 4 tempos</span><button type="button" class="p-sair" id="pp-sair">Sair</button></div>
+  <div class="p-top"><span id="pp-info">Metrônomo palco · 4 tempos</span><div class="p-acts"><button type="button" class="p-tema" id="pp-tema" aria-label="Alternar entre modo claro e escuro" title="Modo claro / escuro"><svg class="sol" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="lua" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button><button type="button" class="p-sair" id="pp-sair">Sair</button></div></div>
   <div class="seg p-ret" role="group" aria-label="Retorno do metrônomo palco">
     <button type="button" id="pp-r-av" aria-pressed="true">Som e visual</button>
     <button type="button" id="pp-r-v" aria-pressed="false">Só visual</button>
@@ -550,13 +607,14 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </div>
   <div class="pfaixa" id="pp-faixa"></div>
   <div class="p-opts">
-    <div class="p-row p-r2">
+    <div class="p-row p-r3">
       <div class="p-o"><label for="pp-sig">Compasso</label><select id="pp-sig"><option>2/2</option><option>3/2</option><option>4/2</option><option>8/2</option><option>1/4</option><option>2/4</option><option>3/4</option><option selected>4/4</option><option>5/4</option><option>6/4</option><option>7/4</option><option>8/4</option><option>3/8</option><option>5/8</option><option>6/8</option><option>7/8</option><option>9/8</option><option>12/8</option></select></div>
-      <div class="p-o"><label for="pp-acc">Acento</label><select id="pp-acc"><option value="1">Só no 1</option><option value="0">Sem acento</option><option value="13">No 1 e no 3</option><option value="24">No 2 e no 4</option><option value="g2">De 2 em 2</option><option value="g3">De 3 em 3</option><option value="all">Todos os tempos</option><option value="custom">Personalizado</option></select></div>
+      <div class="p-o"><label for="pp-acc">Acento</label><select id="pp-acc"><option value="1">Só no 1</option><option value="0">Sem acento</option><option value="13">No 1 e 3</option><option value="24">No 2 e 4</option><option value="g2">De 2 em 2</option><option value="g3">De 3 em 3</option><option value="all">Todos</option><option value="custom">Person.</option></select></div>
+      <div class="p-o"><label for="pp-sub">Subdivisão</label><select id="pp-sub"><option value="1">Nenhuma</option><option value="2">Colcheia</option><option value="3">Tercina</option><option value="4">Semicolc.</option><option value="5">Quintina</option><option value="6">Sextina</option></select></div>
     </div>
     <div class="p-row p-r3">
-      <div class="p-o"><label for="pp-bri">Brilho</label><select id="pp-bri"><option value="6px">Baixo</option><option value="10px">Médio</option><option value="16px">Alto</option></select></div>
       <div class="p-o"><label for="pp-mold">Moldura</label><select id="pp-mold"><option value="1">Ligada</option><option value="0">Desligada</option></select></div>
+      <div class="p-o"><label for="pp-bri">Espessura</label><select id="pp-bri"><option value="6px">Fina</option><option value="10px">Média</option><option value="16px">Grossa</option></select></div>
       <div class="p-o"><label for="pp-lat">Atraso (ms)</label><input type="number" id="pp-lat" min="0" max="400" step="5" value="0"></div>
     </div>
     <div class="p-o">
@@ -590,6 +648,31 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   let ctx = null;
   const ac = () => ctx || (ctx = new (window.AudioContext || window.webkitAudioContext)());
 
+  /* ---------- subdivisão: cliques extras entre os tempos + pontinhos no visual ---------- */
+  const SUBV = { b: .3, m: .5, a: .8 };
+  let subVol = .5;
+  function limparSubs(faixas) { faixas.forEach(f => f.querySelectorAll('u.on').forEach(u => u.classList.remove('on'))); }
+  function montarSubs(faixas, n) {
+    faixas.forEach(f => [...f.children].forEach(b => {
+      b.querySelectorAll('em.sd').forEach(e => e.remove());
+      if (n > 1) { const em = document.createElement('em'); em.className = 'sd'; for (let j = 1; j < n; j++) em.appendChild(document.createElement('u')); b.appendChild(em); }
+    }));
+  }
+  function agendarSub(t, n, bpm, i, faixas, ativo, lat, som) {
+    if (n < 2) return;
+    const dt = 60 / bpm / n;
+    for (let k = 1; k < n; k++) {
+      const tk = t + k * dt;
+      if (som) click(tk, false, subVol, true);
+      setTimeout(() => {
+        if (!ativo()) return;
+        faixas.forEach(f => { const b = f.children[i]; if (b) b.querySelectorAll('u').forEach((u, j) => u.classList.toggle('on', j === k - 1)); });
+      }, Math.max(0, (tk - ac().currentTime) * 1000) + lat);
+    }
+  }
+  try { const v = localStorage.getItem('metro-subvol'); if (SUBV[v]) { subVol = SUBV[v]; $('c-subvol').value = v; $('p-subvol').value = v; } } catch (e) {}
+  [$('c-subvol'), $('p-subvol')].forEach(el => el.onchange = () => { const v = el.value; subVol = SUBV[v]; $('c-subvol').value = v; $('p-subvol').value = v; try { localStorage.setItem('metro-subvol', v); } catch (e) {} });
+
   const SONS = {
     bip:     { nome: 'Bip digital',      t: 'osc', w: 'square',   hi: 1500, lo: 1000, d: .045 },
     seno:    { nome: 'Tom suave',        t: 'osc', w: 'sine',     hi: 1000, lo: 700,  d: .09 },
@@ -614,10 +697,10 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     g.gain.exponentialRampToValueAtTime(.0001, time + dur);
   }
   /* hi = true: acento / mão direita (agudo); false: grave */
-  function click(time, hi, vol = 1) {
+  function click(time, hi, vol = 1, sub = false) {
     const c = ac(), S = SONS[snd.value], out = c.createGain();
     out.gain.value = volume * vol; out.connect(c.destination);
-    const f = hi ? S.hi : S.lo;
+    const f = sub ? S.lo * .85 : (hi ? S.hi : S.lo);
     if (S.t === 'osc') {
       const o = c.createOscillator(), g = c.createGain();
       o.type = S.w; o.frequency.setValueAtTime(f, time);
@@ -713,7 +796,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
-  const VERSAO = '2026-11-07-19';
+  const VERSAO = '2026-11-07-20';
   try {
     fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
       const m = t.match(/const VERSAO = '([^']+)'/);
@@ -743,6 +826,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   function buildBeats() {
     const n = +cSig.value; beatsEl.innerHTML = '';
     for (let i = 0; i < n; i++) { const d = document.createElement('div'); d.className = 'dot' + (i === 0 && cAcc.value === '1' ? ' acc' : ''); d.textContent = i + 1; beatsEl.appendChild(d); }
+    montarSubs([beatsEl], +$('c-sub').value);
     cBeat = 0;
   }
   let cHt;
@@ -763,7 +847,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         if (novo !== cBpm) { cBpm = Math.max(50, Math.min(400, novo)); mudou = true; }
       }
     }
-    return { ui() { [...beatsEl.children].forEach((d, k) => d.classList.toggle('on', k === i)); if (mudou) { setC(cBpm); $('mt-msg').textContent = (mt.modo === 'up' ? 'Subiu' : 'Desceu') + ' para ' + cBpm + ' BPM' + (cBpm === mt.alvo ? ' (limite atingido).' : '.'); } } };
+    agendarSub(t, +$('c-sub').value, cBpm, i, [beatsEl], () => comum.running, 0, true);
+    return { ui() { limparSubs([beatsEl]); [...beatsEl.children].forEach((d, k) => d.classList.toggle('on', k === i)); if (mudou) { setC(cBpm); $('mt-msg').textContent = (mt.modo === 'up' ? 'Subiu' : 'Desceu') + ' para ' + cBpm + ' BPM' + (cBpm === mt.alvo ? ' (limite atingido).' : '.'); } } };
   });
   /* ---------- mudança de tempo: sobe ou desce o BPM a cada N compassos ---------- */
   const MQ = [1, 2, 3, 4, 5, 10, 20, 30, 40, 50];
@@ -794,7 +879,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   $('mt-t-p').onclick = () => { mt.alvo = Math.min(400, mt.alvo + 5); ajMt(); };
   pintarMt();
 
-  function setPlayC(on) { const b = $('c-play'); b.dataset.on = on; b.textContent = on ? 'Parar' : 'Iniciar'; if (!on) [...beatsEl.children].forEach(d => d.classList.remove('on')); }
+  function setPlayC(on) { const b = $('c-play'); b.dataset.on = on; b.textContent = on ? 'Parar' : 'Iniciar'; if (!on) { [...beatsEl.children].forEach(d => d.classList.remove('on')); limparSubs([beatsEl]); } }
   $('c-play').onclick = () => { if (comum.running) { comum.stop(); setPlayC(false); } else { cBeat = 0; mt.bars = 0; comum.start(); setPlayC(true); registrar(cBpm, 'c'); } };
   $('c-range').oninput = e => setC(+e.target.value);
   $('c-minus').onclick = () => setC(cBpm - 1);
@@ -806,6 +891,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     taps.push(n); if (taps.length > 6) taps.shift();
     if (taps.length > 1) setC(60000 / ((taps[taps.length - 1] - taps[0]) / (taps.length - 1)));
   };
+  try { const v = localStorage.getItem('metro-csub'); if (v) $('c-sub').value = v; } catch (e) {}
+  $('c-sub').onchange = () => { montarSubs([beatsEl], +$('c-sub').value); try { localStorage.setItem('metro-csub', $('c-sub').value); } catch (e) {} };
   buildBeats();
 
   /* ---------- treino de bateria ---------- */
@@ -902,14 +989,14 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     pCustom[k] = !pCustom[k];
     pAcc.value = $('pp-acc').value = 'custom'; pintarAc(); salvarP();
   }
-  function salvarP() { try { localStorage.setItem(PKEY, JSON.stringify({ bpm: pBpm, sig: pSig.value, acc: pAcc.value, cus: pCustom, ret: pRet, mold: $('p-mold').value, bri: $('p-bri').value, lat: pLat, vib: pVib ? '1' : '0' })); } catch (e) {} }
+  function salvarP() { try { localStorage.setItem(PKEY, JSON.stringify({ bpm: pBpm, sig: pSig.value, acc: pAcc.value, cus: pCustom, sub: $('p-sub').value, ret: pRet, mold: $('p-mold').value, bri: $('p-bri').value, lat: pLat, vib: pVib ? '1' : '0' })); } catch (e) {} }
   function buildP() {
     const n = parseInt(pSig.value);
     pFaixas.forEach(f => {
       f.innerHTML = ''; f.style.gridTemplateColumns = 'repeat(' + n + ',1fr)';
       for (let i = 0; i < n; i++) { const d = document.createElement('i'); d.textContent = i + 1; f.appendChild(d); }
     });
-    pBeat = 0; $('pp-info').textContent = 'Metrônomo palco · ' + pSig.value; pintarAc();
+    pBeat = 0; $('pp-info').textContent = 'Metrônomo palco · ' + pSig.value; pintarAc(); montarSubs(pFaixas, +$('p-sub').value);
   }
   function setP(v) {
     pBpm = Math.max(50, Math.min(400, Math.round(v)));
@@ -922,6 +1009,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   }
   let pFt;
   function piscaP(i) {
+    limparSubs(pFaixas);
     pFaixas.forEach(f => [...f.children].forEach((d, k) => { d.classList.toggle('on', k === i); d.classList.toggle('um', k === i && isAcc(i)); }));
     if (pMold && !pPal.hidden) {
       pPal.classList.remove('f1', 'f'); pPal.classList.add(isAcc(i) ? 'f1' : 'f');
@@ -973,6 +1061,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       }
     }
     const acc = isAcc(i);
+    agendarSub(t, +$('p-sub').value, pBpm, i, pFaixas, () => palco.running, pLat, pRet !== 'v');
     if (pRet !== 'v') click(t, acc, acc ? 1 : (composto && pAcc.value === '1' && i % 3 === 0 ? 0.88 : 0.7));
     /* visual agendado pelo relógio de áudio (não depende da animação do navegador) */
     setTimeout(() => { if (palco.running) { piscaP(i); if (mudou) setP(pBpm); } }, Math.max(0, (t - ac().currentTime) * 1000) + pLat);
@@ -980,7 +1069,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   });
   function setPlayP(on) {
     ['p-play', 'pp-play'].forEach(id => { const b = $(id); b.dataset.on = on; b.textContent = on ? 'Parar' : 'Iniciar'; });
-    if (!on) { pFaixas.forEach(f => [...f.children].forEach(d => d.classList.remove('on', 'um'))); pPal.classList.remove('f1', 'f'); }
+    if (!on) { limparSubs(pFaixas); pFaixas.forEach(f => [...f.children].forEach(d => d.classList.remove('on', 'um'))); pPal.classList.remove('f1', 'f'); }
   }
   function alternarP() { if (palco.running) { palco.stop(); setPlayP(false); } else { pBeat = 0; pMt.bars = 0; pMt.dir = 1; if (pMt.modo === 'ping') setP(lim(pMt.ini)); palco.start(); setPlayP(true); } }
   function abrirPalco() {
@@ -1004,9 +1093,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     if (pAcc.value !== 'custom') pAccPrev = pAcc.value;
     pintarAc(); salvarP();
   };
+  $('p-sub').onchange = () => { montarSubs(pFaixas, +$('p-sub').value); salvarP(); };
   pFaixas.forEach(f => f.addEventListener('click', e => { const el = e.target.closest('i'); if (el) tocarBloco([...f.children].indexOf(el)); }));
   $('p-bri').onchange = () => { pPal.style.setProperty('--fw', $('p-bri').value); salvarP(); };
-  $('p-mold').onchange = () => { pMold = $('p-mold').value === '1'; salvarP(); };
+  function pintarEsp() { $('p-bri').disabled = $('pp-bri').disabled = !pMold; }
+  $('p-mold').onchange = () => { pMold = $('p-mold').value === '1'; pintarEsp(); salvarP(); };
   $('p-lat').onchange = () => { pLat = Math.max(0, Math.min(400, +$('p-lat').value || 0)); $('p-lat').value = pLat; salvarP(); };
   $('p-vib').onchange = () => { pVib = $('p-vib').value === '1'; salvarP(); };
   if (navigator.vibrate) $('p-vib-box').hidden = false;
@@ -1018,18 +1109,22 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   try {
     const sv = JSON.parse(localStorage.getItem(PKEY) || 'null');
     if (sv) {
-      pSig.value = (sv.sig && sv.sig.includes('/')) ? sv.sig : '4/4'; pAcc.value = sv.acc || '1'; if (pAcc.value !== 'custom') pAccPrev = pAcc.value; pCustom = Array.isArray(sv.cus) ? sv.cus : []; $('p-mold').value = sv.mold || '1'; $('p-bri').value = sv.bri || '16px';
+      pSig.value = (sv.sig && sv.sig.includes('/')) ? sv.sig : '4/4'; $('p-sub').value = sv.sub || '1'; pAcc.value = sv.acc || '1'; if (pAcc.value !== 'custom') pAccPrev = pAcc.value; pCustom = Array.isArray(sv.cus) ? sv.cus : []; $('p-mold').value = sv.mold || '1'; $('p-bri').value = sv.bri || '16px';
       pMold = $('p-mold').value === '1'; pLat = +sv.lat || 0; $('p-lat').value = pLat; pVib = sv.vib === '1'; $('p-vib').value = sv.vib || '0';
       setRetP(sv.ret === 'v' ? 'v' : 'av'); if (sv.bpm) pBpm = sv.bpm;
     }
   } catch (e) {}
   /* opções da aba e do modo palco andam juntas */
-  [['p-sig', 'pp-sig'], ['p-acc', 'pp-acc'], ['p-bri', 'pp-bri'], ['p-mold', 'pp-mold'], ['p-lat', 'pp-lat']].forEach(([a, b]) => {
+  [['p-sig', 'pp-sig'], ['p-acc', 'pp-acc'], ['p-sub', 'pp-sub'], ['p-bri', 'pp-bri'], ['p-mold', 'pp-mold'], ['p-lat', 'pp-lat']].forEach(([a, b]) => {
     const orig = $(a).onchange;
     $(b).onchange = () => { $(a).value = $(b).value; orig(); $(b).value = $(a).value; };
     $(a).onchange = () => { orig(); $(b).value = $(a).value; };
     $(b).value = $(a).value;
   });
+  pintarEsp();
+  /* modo claro / escuro do modo palco */
+  try { if (localStorage.getItem('metro-palco-tema') === 'c') pPal.classList.add('claro'); } catch (e) {}
+  $('pp-tema').onclick = () => { const c = pPal.classList.toggle('claro'); try { localStorage.setItem('metro-palco-tema', c ? 'c' : 'e'); } catch (e) {} };
   pPal.style.setProperty('--fw', $('p-bri').value);
   buildP(); setP(pBpm);
 
