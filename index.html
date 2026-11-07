@@ -280,7 +280,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
           <div class="label">Retorno</div>
           <div class="seg" role="group" aria-label="Retorno do metrônomo palco">
             <button type="button" id="p-r-av" aria-pressed="true">Som e visual</button>
-            <button type="button" id="p-r-a" aria-pressed="false">Só som</button>
             <button type="button" id="p-r-v" aria-pressed="false">Só visual</button>
           </div>
           <div class="bpm-box" style="margin-top:26px">
@@ -494,7 +493,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <h2 class="title" id="t4">Veja o tempo com a visão periférica e toque no clique</h2>
     <p class="lead">Feito para ensaio e show: a batida acende em blocos grandes, a batida 1 se destaca em laranja e o modo palco ocupa a tela toda, com fundo escuro.</p>
     <div class="steps">
-      <div class="s"><em>01</em><h3>Retorno</h3><p>Escolha Som e visual, Só som ou Só visual. Em Só visual o metrônomo fica totalmente mudo, ideal para tocar sem clique no ouvido.</p></div>
+      <div class="s"><em>01</em><h3>Retorno</h3><p>Escolha Som e visual ou Só visual. Em Só visual o metrônomo fica totalmente mudo, ideal para tocar sem clique no ouvido.</p></div>
       <div class="s"><em>02</em><h3>Faixa de batidas</h3><p>Cada tempo do compasso é um bloco grande. A batida 1 acende em laranja e as outras em azul, então você reconhece o início do compasso de relance.</p></div>
       <div class="s"><em>03</em><h3>Modo palco</h3><p>Abre a tela cheia, com o BPM enorme e a moldura piscando. Se o visual chegar adiantado em relação ao som, por exemplo com fone Bluetooth, aumente o atraso do visual.</p></div>
     </div>
@@ -536,7 +535,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <div class="p-top"><span id="pp-info">Metrônomo palco · 4 tempos</span><button type="button" class="p-sair" id="pp-sair">Sair</button></div>
   <div class="seg p-ret" role="group" aria-label="Retorno do metrônomo palco">
     <button type="button" id="pp-r-av" aria-pressed="true">Som e visual</button>
-    <button type="button" id="pp-r-a" aria-pressed="false">Só som</button>
     <button type="button" id="pp-r-v" aria-pressed="false">Só visual</button>
   </div>
   <div class="p-mid">
@@ -704,7 +702,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
-  const VERSAO = '2026-11-07-17';
+  const VERSAO = '2026-11-07-18';
   try {
     fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
       const m = t.match(/const VERSAO = '([^']+)'/);
@@ -886,7 +884,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   }
   function setRetP(k) {
     pRet = k;
-    [['av', 'p-r-av'], ['a', 'p-r-a'], ['v', 'p-r-v'], ['av', 'pp-r-av'], ['a', 'pp-r-a'], ['v', 'pp-r-v']].forEach(([x, id]) => $(id).setAttribute('aria-pressed', pRet === x));
+    [['av', 'p-r-av'], ['v', 'p-r-v'], ['av', 'pp-r-av'], ['v', 'pp-r-v']].forEach(([x, id]) => $(id).setAttribute('aria-pressed', pRet === x));
     salvarP();
   }
   let pFt;
@@ -953,7 +951,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   $('p-range').oninput = $('pp-range').oninput = e => setP(+e.target.value);
   $('p-minus').onclick = $('pp-minus').onclick = () => setP(pBpm - 1);
   $('p-plus').onclick = $('pp-plus').onclick = () => setP(pBpm + 1);
-  $('p-r-av').onclick = $('pp-r-av').onclick = () => setRetP('av'); $('p-r-a').onclick = $('pp-r-a').onclick = () => setRetP('a'); $('p-r-v').onclick = $('pp-r-v').onclick = () => setRetP('v');
+  $('p-r-av').onclick = $('pp-r-av').onclick = () => setRetP('av'); $('p-r-v').onclick = $('pp-r-v').onclick = () => setRetP('v');
   pSig.onchange = () => { buildP(); salvarP(); }; pAcc.onchange = salvarP;
   $('p-bri').onchange = () => { pPal.style.setProperty('--fw', $('p-bri').value); salvarP(); };
   $('p-mold').onchange = () => { pMold = $('p-mold').value === '1'; salvarP(); };
@@ -970,7 +968,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     if (sv) {
       pSig.value = sv.sig || '4'; pAcc.value = sv.acc || '1'; $('p-mold').value = sv.mold || '1'; $('p-bri').value = sv.bri || '16px';
       pMold = $('p-mold').value === '1'; pLat = +sv.lat || 0; $('p-lat').value = pLat; pVib = sv.vib === '1'; $('p-vib').value = sv.vib || '0';
-      setRetP(sv.ret || 'av'); if (sv.bpm) pBpm = sv.bpm;
+      setRetP(sv.ret === 'v' ? 'v' : 'av'); if (sv.bpm) pBpm = sv.bpm;
     }
   } catch (e) {}
   /* opções da aba e do modo palco andam juntas */
