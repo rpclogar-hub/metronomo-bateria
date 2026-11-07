@@ -190,7 +190,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .palco .pfaixa i{height:clamp(80px,22vh,200px);background:#12143a;border-color:#23265a;color:#5b6096;font-size:clamp(1.6rem,4vw,3rem)}
 .palco .pfaixa i.on{background:#1b1bf2;border-color:#4c4cff;color:#fff}
 .palco .pfaixa i.on.um{background:#ff5100;border-color:#ff8a4d}
-.p-bot{display:flex;justify-content:center}
+.p-bot{display:flex;justify-content:center;margin-top:22px}
 .p-bot .cta{min-width:220px}
 .palco .cta[data-on=true]{background:#1b1bf2;box-shadow:none}
 [hidden]{display:none!important}
@@ -498,9 +498,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="p-bpm"><button type="button" class="p-step" id="pp-minus" aria-label="Diminuir 1 BPM">−</button><strong id="pp-bpm">120</strong><button type="button" class="p-step" id="pp-plus" aria-label="Aumentar 1 BPM">+</button></div>
     <small>BPM</small>
     <input type="range" id="pp-range" min="50" max="400" value="120" aria-label="BPM do modo palco">
+    <div class="p-bot"><button type="button" class="cta" id="pp-play" data-on="false">Iniciar</button></div>
   </div>
   <div class="pfaixa" id="pp-faixa"></div>
-  <div class="p-bot"><button type="button" class="cta" id="pp-play" data-on="false">Iniciar</button></div>
 </div>
 
 <footer><div class="wrap"><span>Metrônomo de Bateria · uso pessoal de estudo</span><span>Barra de espaço inicia e pausa o modo aberto</span></div></footer>
@@ -634,7 +634,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
-  const VERSAO = '2026-11-07-10';
+  const VERSAO = '2026-11-07-11';
   try {
     fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
       const m = t.match(/const VERSAO = '([^']+)'/);
