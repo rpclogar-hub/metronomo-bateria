@@ -176,22 +176,34 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .legenda{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:.85rem;color:var(--note)}
 .legenda span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
 .legenda .l1::before{background:#ff5100}.legenda .l2::before{background:#1b1bf2}
-.palco{position:fixed;inset:0;z-index:100;background:#06071a;display:flex;flex-direction:column;justify-content:space-between;gap:16px;padding:22px 26px;color:#fff;--fw:16px}
+.palco{position:fixed;inset:0;z-index:100;background:#06071a;display:flex;flex-direction:column;justify-content:space-between;gap:12px;padding:16px 20px;color:#fff;--fw:16px;overflow-y:auto}
 .palco.f1{box-shadow:inset 0 0 0 var(--fw) #ff5100}
 .palco.f{box-shadow:inset 0 0 0 var(--fw) #1b1bf2}
 .p-top{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#9aa0c8;font-size:.8rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase}
 .p-sair{border:1px solid #3a3d6e;border-radius:999px;padding:10px 20px;color:#cfd3f5;font-weight:700;background:transparent}
 .p-mid{text-align:center}
 .p-bpm{display:flex;align-items:center;justify-content:center;gap:clamp(12px,4vw,40px)}
-.p-bpm strong{font-size:clamp(4.5rem,16vw,9rem);letter-spacing:-.07em;line-height:1;font-variant-numeric:tabular-nums}
-.p-step{width:56px;height:56px;border-radius:50%;border:1px solid #3a3d6e;color:#cfd3f5;font-size:1.6rem;font-weight:700;background:transparent}
-.p-mid input[type=range]{display:block;width:min(86vw,640px);height:36px;margin:14px auto 0;accent-color:#ff5100}
+.p-bpm strong{font-size:clamp(3.2rem,min(15vw,12vh),8rem);letter-spacing:-.07em;line-height:1;font-variant-numeric:tabular-nums}
+.p-step{width:46px;height:46px;border-radius:50%;border:1px solid #3a3d6e;color:#cfd3f5;font-size:1.6rem;font-weight:700;background:transparent}
+.p-mid input[type=range]{display:block;width:min(86vw,640px);height:32px;margin:6px auto 0;accent-color:#ff5100}
 .p-mid small{display:block;color:#fb923c;font-weight:800;letter-spacing:.2em;margin-top:2px}
-.palco .pfaixa i{height:clamp(80px,22vh,200px);background:#12143a;border-color:#23265a;color:#5b6096;font-size:clamp(1.6rem,4vw,3rem)}
+.palco .pfaixa{margin-top:0;gap:10px}
+.palco .pfaixa i{height:clamp(52px,14vh,150px);background:#12143a;border-color:#23265a;color:#5b6096;font-size:clamp(1.6rem,4vw,3rem)}
+.palco .seg{margin-top:0;gap:8px;flex-wrap:nowrap}
+.palco .seg button{flex:1;padding:10px 6px;font-size:.85rem;border-color:#3a3d6e;color:#cfd3f5;background:transparent;box-shadow:none}
+.palco .seg button:hover{background:#ffffff14}
+.palco .seg button[aria-pressed=true]{background:linear-gradient(90deg,#ff5100,#fb923c);border-color:transparent;color:#fff;box-shadow:0 6px 18px #ff510040}
+.p-opts{display:grid;gap:10px}
+.p-row{display:grid;gap:10px}
+.p-r2{grid-template-columns:1fr 1fr}
+.p-r3{grid-template-columns:repeat(3,1fr)}
+.p-o{display:flex;flex-direction:column;gap:5px;min-width:0}
+.p-o label{font-size:.62rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#9aa0c8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-o select,.p-o input{width:100%;min-width:0;font:inherit;font-size:.9rem;padding:9px 10px;border:1px solid #23265a;border-radius:8px;background:#12143a;color:#fff}
 .palco .pfaixa i.on{background:#1b1bf2;border-color:#4c4cff;color:#fff}
 .palco .pfaixa i.on.um{background:#ff5100;border-color:#ff8a4d}
-.p-bot{display:flex;justify-content:center;margin-top:22px}
-.p-bot .cta{min-width:220px}
+.p-bot{display:flex;justify-content:center;margin-top:10px}
+.p-bot .cta{min-width:200px;padding:13px 34px}
 .palco .cta[data-on=true]{background:#1b1bf2;box-shadow:none}
 [hidden]{display:none!important}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -494,6 +506,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <div class="palco" id="palco" hidden role="dialog" aria-label="Modo palco">
   <div class="p-top"><span id="pp-info">Metrônomo palco · 4 tempos</span><button type="button" class="p-sair" id="pp-sair">Sair</button></div>
+  <div class="seg p-ret" role="group" aria-label="Retorno do metrônomo palco">
+    <button type="button" id="pp-r-av" aria-pressed="true">Som e visual</button>
+    <button type="button" id="pp-r-a" aria-pressed="false">Só som</button>
+    <button type="button" id="pp-r-v" aria-pressed="false">Só visual</button>
+  </div>
   <div class="p-mid">
     <div class="p-bpm"><button type="button" class="p-step" id="pp-minus" aria-label="Diminuir 1 BPM">−</button><strong id="pp-bpm">120</strong><button type="button" class="p-step" id="pp-plus" aria-label="Aumentar 1 BPM">+</button></div>
     <small>BPM</small>
@@ -501,6 +518,17 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="p-bot"><button type="button" class="cta" id="pp-play" data-on="false">Iniciar</button></div>
   </div>
   <div class="pfaixa" id="pp-faixa"></div>
+  <div class="p-opts">
+    <div class="p-row p-r2">
+      <div class="p-o"><label for="pp-sig">Tempos por compasso</label><select id="pp-sig"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div>
+      <div class="p-o"><label for="pp-acc">Acento no 1</label><select id="pp-acc"><option value="1">Ligado</option><option value="0">Desligado</option></select></div>
+    </div>
+    <div class="p-row p-r3">
+      <div class="p-o"><label for="pp-bri">Brilho</label><select id="pp-bri"><option value="6px">Baixo</option><option value="10px">Médio</option><option value="16px">Alto</option></select></div>
+      <div class="p-o"><label for="pp-mold">Moldura</label><select id="pp-mold"><option value="1">Ligada</option><option value="0">Desligada</option></select></div>
+      <div class="p-o"><label for="pp-lat">Atraso (ms)</label><input type="number" id="pp-lat" min="0" max="400" step="5" value="0"></div>
+    </div>
+  </div>
 </div>
 
 <footer><div class="wrap"><span>Metrônomo de Bateria · uso pessoal de estudo</span><span>Barra de espaço inicia e pausa o modo aberto</span></div></footer>
@@ -634,7 +662,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
-  const VERSAO = '2026-11-07-11';
+  const VERSAO = '2026-11-07-13';
   try {
     fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
       const m = t.match(/const VERSAO = '([^']+)'/);
@@ -816,7 +844,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   }
   function setRetP(k) {
     pRet = k;
-    [['av', 'p-r-av'], ['a', 'p-r-a'], ['v', 'p-r-v']].forEach(([x, id]) => $(id).setAttribute('aria-pressed', pRet === x));
+    [['av', 'p-r-av'], ['a', 'p-r-a'], ['v', 'p-r-v'], ['av', 'pp-r-av'], ['a', 'pp-r-a'], ['v', 'pp-r-v']].forEach(([x, id]) => $(id).setAttribute('aria-pressed', pRet === x));
     salvarP();
   }
   let pFt;
@@ -855,7 +883,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   $('p-range').oninput = $('pp-range').oninput = e => setP(+e.target.value);
   $('p-minus').onclick = $('pp-minus').onclick = () => setP(pBpm - 1);
   $('p-plus').onclick = $('pp-plus').onclick = () => setP(pBpm + 1);
-  $('p-r-av').onclick = () => setRetP('av'); $('p-r-a').onclick = () => setRetP('a'); $('p-r-v').onclick = () => setRetP('v');
+  $('p-r-av').onclick = $('pp-r-av').onclick = () => setRetP('av'); $('p-r-a').onclick = $('pp-r-a').onclick = () => setRetP('a'); $('p-r-v').onclick = $('pp-r-v').onclick = () => setRetP('v');
   pSig.onchange = () => { buildP(); salvarP(); }; pAcc.onchange = salvarP;
   $('p-bri').onchange = () => { pPal.style.setProperty('--fw', $('p-bri').value); salvarP(); };
   $('p-mold').onchange = () => { pMold = $('p-mold').value === '1'; salvarP(); };
@@ -875,6 +903,13 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       setRetP(sv.ret || 'av'); if (sv.bpm) pBpm = sv.bpm;
     }
   } catch (e) {}
+  /* opções da aba e do modo palco andam juntas */
+  [['p-sig', 'pp-sig'], ['p-acc', 'pp-acc'], ['p-bri', 'pp-bri'], ['p-mold', 'pp-mold'], ['p-lat', 'pp-lat']].forEach(([a, b]) => {
+    const orig = $(a).onchange;
+    $(b).onchange = () => { $(a).value = $(b).value; orig(); $(b).value = $(a).value; };
+    $(a).onchange = () => { orig(); $(b).value = $(a).value; };
+    $(b).value = $(a).value;
+  });
   pPal.style.setProperty('--fw', $('p-bri').value);
   buildP(); setP(pBpm);
 
