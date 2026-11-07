@@ -51,7 +51,7 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .soundbar .ghost{padding:11px 22px}
 .soundbar input[type=range]{width:160px;flex:none}
 /* abas */
-.tabs{display:flex;flex-wrap:wrap;gap:14px;margin:0 0 40px}
+.tabs{display:flex;flex-wrap:wrap;gap:14px;margin:30px 0 34px}
 .tab{flex:1;min-width:150px;padding:15px 26px;border:1px solid var(--primary);border-radius:999px;font-weight:700;font-size:1.05rem;color:var(--primary);background:#fff;letter-spacing:-.01em}
 .tab:hover{background:var(--mist)}
 .tab[aria-selected=true]{background:linear-gradient(90deg,#ff5100,#fb923c);border-color:transparent;color:#fff;box-shadow:0 8px 24px #ff510033}
@@ -185,14 +185,14 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <section class="scene a" id="metronomo" aria-labelledby="t1">
   <div class="wrap">
-    <div class="tabs" role="tablist">
-      <button class="tab" role="tab" id="tab-tre" aria-selected="true" aria-controls="p-tre">Treino de bateria</button>
-      <button class="tab" role="tab" id="tab-com" aria-selected="false" aria-controls="p-com">Metrônomo</button>
-    </div>
-
     <div class="kicker">01 / Metrônomo</div>
     <h2 class="title" id="t1">Escolha o modo de estudo</h2>
     <p class="lead">Use o metrônomo comum para marcar o tempo ou o treino de bateria para desenvolver a independência e a velocidade das mãos.</p>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-com" aria-selected="true" aria-controls="p-com">Metrônomo</button>
+      <button class="tab" role="tab" id="tab-tre" aria-selected="false" aria-controls="p-tre">Treino de bateria</button>
+    </div>
 
     <div class="soundbar">
       <div class="opt">
@@ -207,7 +207,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     </div>
 
     <!-- TREINO -->
-    <div class="panel on" id="p-tre" role="tabpanel" aria-labelledby="tab-tre">
+    <div class="panel" id="p-tre" role="tabpanel" aria-labelledby="tab-tre">
       <div class="grid">
         <div>
           <div class="bpm-box">
@@ -291,7 +291,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       </div>
     </div>
     <!-- COMUM -->
-    <div class="panel" id="p-com" role="tabpanel" aria-labelledby="tab-com">
+    <div class="panel on" id="p-com" role="tabpanel" aria-labelledby="tab-com">
       <div class="grid">
         <div>
           <div class="bpm-box">
@@ -506,7 +506,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
-  const VERSAO = '2026-11-07-6';
+  const VERSAO = '2026-11-07-7';
   try {
     fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
       const m = t.match(/const VERSAO = '([^']+)'/);
