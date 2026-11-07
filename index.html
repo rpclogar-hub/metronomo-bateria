@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Metrônomo de Bateria</title>
-<meta name="description" content="Metrônomo comum de 50 a 300 BPM e treino de bateria com alternância de mãos, de 1 a 20 batidas por mão.">
+<meta name="description" content="Metrônomo comum de 50 a 400 BPM e treino de bateria com alternância de mãos, de 1 a 20 batidas por mão.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -178,7 +178,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="eyebrow">Estudo de bateria</div>
     <h1>Metrônomo de Bateria</h1>
     <h2>Treine as duas mãos, <span>do lento ao veloz.</span></h2>
-    <p>Metrônomo comum de 50 a 300 BPM e um treino que alterna as mãos de 1 a 20 batidas, subindo o andamento sozinho.</p>
+    <p>Metrônomo comum de 50 a 400 BPM e um treino que alterna as mãos de 1 a 20 batidas, subindo o andamento sozinho.</p>
   </div>
 </header>
 
@@ -293,7 +293,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
             <div class="bpm-num"><span id="c-bpm">120</span><small>BPM</small></div>
             <div class="row">
               <button class="step" id="c-minus" aria-label="Diminuir 1 BPM">−</button>
-              <input type="range" id="c-range" min="50" max="300" value="120" aria-label="BPM">
+              <input type="range" id="c-range" min="50" max="400" value="120" aria-label="BPM">
               <button class="step" id="c-plus" aria-label="Aumentar 1 BPM">+</button>
             </div>
           </div>
@@ -326,7 +326,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
             <div class="mt-rows" id="mt-rows" data-off="true">
               <div class="mt-row"><span>Alterar em</span><div class="mt-ctl"><button class="step" type="button" id="mt-q-m" aria-label="Diminuir quantidade de BPM">−</button><output id="mt-q">3<small>BPM</small></output><button class="step" type="button" id="mt-q-p" aria-label="Aumentar quantidade de BPM">+</button></div></div>
               <div class="mt-row"><span>A cada</span><div class="mt-ctl"><button class="step" type="button" id="mt-c-m" aria-label="Menos compassos">−</button><output id="mt-c">10<small>compassos</small></output><button class="step" type="button" id="mt-c-p" aria-label="Mais compassos">+</button></div></div>
-              <div class="mt-row"><span>Até</span><div class="mt-ctl"><button class="step" type="button" id="mt-t-m" aria-label="Diminuir limite de BPM">−</button><output id="mt-t">300<small>BPM</small></output><button class="step" type="button" id="mt-t-p" aria-label="Aumentar limite de BPM">+</button></div></div>
+              <div class="mt-row"><span>Até</span><div class="mt-ctl"><button class="step" type="button" id="mt-t-m" aria-label="Diminuir limite de BPM">−</button><output id="mt-t">400<small>BPM</small></output><button class="step" type="button" id="mt-t-p" aria-label="Aumentar limite de BPM">+</button></div></div>
             </div>
             <div class="mt-msg" id="mt-msg" role="status"></div>
           </div>
@@ -500,7 +500,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
-  const VERSAO = '2026-11-07-3';
+  const VERSAO = '2026-11-07-4';
   try {
     fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
       const m = t.match(/const VERSAO = '([^']+)'/);
@@ -531,7 +531,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   }
   let cHt;
   function setC(v) {
-    cBpm = Math.max(50, Math.min(300, Math.round(v)));
+    cBpm = Math.max(50, Math.min(400, Math.round(v)));
     $('c-bpm').textContent = cBpm; $('c-range').value = cBpm;
     if (comum.running) { clearTimeout(cHt); cHt = setTimeout(() => registrar(cBpm, 'c'), 1500); }
   }
@@ -544,14 +544,14 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       if (mt.bars >= mt.comp) {
         mt.bars = 0;
         const q = MQ[mt.qi], novo = mt.modo === 'up' ? Math.min(mt.alvo, cBpm + q) : Math.max(mt.alvo, cBpm - q);
-        if (novo !== cBpm) { cBpm = Math.max(50, Math.min(300, novo)); mudou = true; }
+        if (novo !== cBpm) { cBpm = Math.max(50, Math.min(400, novo)); mudou = true; }
       }
     }
     return { ui() { [...beatsEl.children].forEach((d, k) => d.classList.toggle('on', k === i)); if (mudou) { setC(cBpm); $('mt-msg').textContent = (mt.modo === 'up' ? 'Subiu' : 'Desceu') + ' para ' + cBpm + ' BPM' + (cBpm === mt.alvo ? ' (limite atingido).' : '.'); } } };
   });
   /* ---------- mudança de tempo: sobe ou desce o BPM a cada N compassos ---------- */
   const MQ = [1, 2, 3, 4, 5, 10, 20, 30, 40, 50];
-  const mt = { modo: 'off', qi: 2, comp: 10, alvo: 300, bars: 0 };
+  const mt = { modo: 'off', qi: 2, comp: 10, alvo: 400, bars: 0 };
   function pintarMt() {
     $('mt-q').innerHTML = MQ[mt.qi] + '<small>BPM</small>';
     $('mt-c').innerHTML = mt.comp + '<small>' + (mt.comp === 1 ? 'compasso' : 'compassos') + '</small>';
@@ -561,7 +561,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   }
   function setModoMt(k) {
     mt.modo = k; mt.bars = 0;
-    if (k === 'up' && mt.alvo <= cBpm) mt.alvo = 300;
+    if (k === 'up' && mt.alvo <= cBpm) mt.alvo = 400;
     if (k === 'down' && mt.alvo >= cBpm) mt.alvo = 50;
     $('mt-msg').textContent = k === 'off' ? '' : (k === 'up' ? 'Sobe ' : 'Desce ') + MQ[mt.qi] + ' BPM a cada ' + mt.comp + (mt.comp === 1 ? ' compasso' : ' compassos') + ', até ' + mt.alvo + ' BPM.';
     pintarMt();
@@ -575,7 +575,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   $('mt-c-m').onclick = () => { mt.comp = Math.max(1, mt.comp - 1); ajMt(); };
   $('mt-c-p').onclick = () => { mt.comp = Math.min(99, mt.comp + 1); ajMt(); };
   $('mt-t-m').onclick = () => { mt.alvo = Math.max(50, mt.alvo - 5); ajMt(); };
-  $('mt-t-p').onclick = () => { mt.alvo = Math.min(300, mt.alvo + 5); ajMt(); };
+  $('mt-t-p').onclick = () => { mt.alvo = Math.min(400, mt.alvo + 5); ajMt(); };
   pintarMt();
 
   function setPlayC(on) { const b = $('c-play'); b.dataset.on = on; b.textContent = on ? 'Parar' : 'Iniciar'; if (!on) [...beatsEl.children].forEach(d => d.classList.remove('on')); }
