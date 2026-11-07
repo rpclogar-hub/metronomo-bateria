@@ -51,9 +51,10 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .soundbar .ghost{padding:11px 22px}
 .soundbar input[type=range]{width:160px;flex:none}
 /* abas */
-.tabs{display:flex;border-bottom:1px solid var(--line);margin:34px 0 0}
-.tab{padding:14px 22px;font-weight:700;font-size:.95rem;color:var(--note);border-bottom:3px solid transparent;margin-bottom:-1px;letter-spacing:-.01em}
-.tab[aria-selected=true]{color:var(--primary);border-color:var(--primary)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px;margin:0 0 40px;background:var(--navy);border-radius:16px;box-shadow:0 10px 30px #0e0f2c33}
+.tab{padding:18px 16px;font-weight:800;font-size:1.05rem;color:#fff;background:#ffffff1a;border-radius:10px;letter-spacing:-.01em;transition:background .15s}
+.tab:hover{background:#ffffff2e}
+.tab[aria-selected=true]{background:linear-gradient(90deg,#ff5100,#fb923c);box-shadow:0 6px 18px #ff510055}
 .panel{display:none;padding-top:34px}
 .panel.on{display:block}
 
@@ -164,7 +165,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .steps{grid-template-columns:1fr}
   .s+.s{border-left:0;border-top:1px solid var(--line);padding-left:0;margin-top:20px;padding-top:20px}
   .scene{padding:52px 20px}.hero{padding:52px 20px 60px}
-  .tab{padding:12px 14px;font-size:.88rem}
+  .tab{padding:15px 8px;font-size:.95rem}
   .stats{grid-template-columns:1fr 1fr 1fr}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -184,6 +185,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <section class="scene a" id="metronomo" aria-labelledby="t1">
   <div class="wrap">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-tre" aria-selected="true" aria-controls="p-tre">Treino de bateria</button>
+      <button class="tab" role="tab" id="tab-com" aria-selected="false" aria-controls="p-com">Metrônomo</button>
+    </div>
+
     <div class="kicker">01 / Metrônomo</div>
     <h2 class="title" id="t1">Escolha o modo de estudo</h2>
     <p class="lead">Use o metrônomo comum para marcar o tempo ou o treino de bateria para desenvolver a independência e a velocidade das mãos.</p>
@@ -200,11 +206,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       </div>
     </div>
 
-    <div class="tabs" role="tablist">
-      <button class="tab" role="tab" id="tab-tre" aria-selected="true" aria-controls="p-tre">Treino de bateria</button>
-      <button class="tab" role="tab" id="tab-com" aria-selected="false" aria-controls="p-com">Metrônomo</button>
-    </div>
-
     <!-- TREINO -->
     <div class="panel on" id="p-tre" role="tabpanel" aria-labelledby="tab-tre">
       <div class="grid">
@@ -212,6 +213,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
           <div class="bpm-box">
             <div class="label">Andamento atual</div>
             <div class="bpm-num"><span id="t-bpm">100</span><small>BPM</small></div>
+            <div class="row">
+              <button class="step" id="t-minus" aria-label="Diminuir 1 BPM">−</button>
+              <input type="range" id="t-range" min="20" max="400" value="100" aria-label="BPM atual do treino">
+              <button class="step" id="t-plus" aria-label="Aumentar 1 BPM">+</button>
+            </div>
             <div class="bar" aria-hidden="true"><i id="t-bar"></i></div>
             <div class="msg" id="t-msg">Escolha o BPM inicial e comece.</div>
             <div class="flash" id="t-flash" role="status"></div>
@@ -500,7 +506,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
-  const VERSAO = '2026-11-07-4';
+  const VERSAO = '2026-11-07-5';
   try {
     fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
       const m = t.match(/const VERSAO = '([^']+)'/);
@@ -607,7 +613,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     $('t-flash').classList.remove('on');
   }
   function paint(hit) {
-    $('t-bpm').textContent = st.bpm;
+    $('t-bpm').textContent = st.bpm; $('t-range').value = st.bpm;
     $('t-seq').textContent = st.n + ' / ' + maxN.value;
     $('t-per').textContent = st.n;
     const lo = +$('t-start').value, hi = Math.max(+$('t-max').value, lo + 1);
@@ -618,6 +624,16 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     });
     $('t-hit').textContent = hit ? hit.total + ' / ' + hit.n * 2 : '–';
   }
+  /* deslizador e botões − / + do treino: ajusta o BPM sem precisar digitar */
+  function setT(v) {
+    v = Math.max(20, Math.min(400, Math.round(v)));
+    const noInicio = st.done || (st.n === +minN.value && st.idx === 1 && st.side === 'D');
+    if (!treino.running && noInicio) { $('t-start').value = v; reset(); $('t-msg').textContent = 'BPM inicial ajustado para ' + v + '.'; }
+    else { st.bpm = v; paint(null); }
+  }
+  $('t-range').oninput = e => setT(+e.target.value);
+  $('t-minus').onclick = () => setT(st.bpm - 1);
+  $('t-plus').onclick = () => setT(st.bpm + 1);
   const treino = Engine(() => st.bpm, t => {
     if (st.done) return null;
     const cur = { bpm: st.bpm, n: st.n, side: st.side, idx: st.idx, total: (st.side === 'E' ? st.n : 0) + st.idx };
