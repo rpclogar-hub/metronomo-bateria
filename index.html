@@ -188,14 +188,15 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .p-step{width:46px;height:46px;border-radius:50%;border:1px solid #3a3d6e;color:#cfd3f5;font-size:1.6rem;font-weight:700;background:transparent}
 .p-mid input[type=range]{display:block;width:min(86vw,640px);height:32px;margin:6px auto 0;accent-color:#ff5100}
 .p-mid small{display:block;color:#fb923c;font-weight:800;letter-spacing:.2em;margin-top:2px}
-.palco .pfaixa{margin-top:0;gap:10px}
-.palco .pfaixa i{height:clamp(52px,14vh,150px);background:#12143a;border-color:#23265a;color:#5b6096;font-size:clamp(1.6rem,4vw,3rem)}
+.palco .pfaixa{margin-top:0;gap:10px;flex:1 1 60px;min-height:40px;max-height:150px}
+.palco .pfaixa i{height:auto;background:#12143a;border-color:#23265a;color:#5b6096;font-size:clamp(1.6rem,4vw,3rem)}
 .palco .seg{margin-top:0;gap:8px;flex-wrap:nowrap}
 .palco .seg button{flex:1;padding:9px 4px;font-size:.82rem;white-space:nowrap;border-color:#3a3d6e;color:#cfd3f5;background:transparent;box-shadow:none}
 .palco .seg button:hover{background:#ffffff14}
 .palco .seg button[aria-pressed=true]{background:linear-gradient(90deg,#ff5100,#fb923c);border-color:transparent;color:#fff;box-shadow:0 6px 18px #ff510040}
 .p-opts{display:grid;gap:10px}
 .p-foot{display:flex;justify-content:center}
+#pp-mt-rows[data-off=true]{opacity:.4;pointer-events:none}
 @media(max-height:700px){
   .palco{gap:8px;padding:10px 16px}
   .p-sair{padding:7px 16px}
@@ -204,8 +205,20 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .p-mid input[type=range]{height:26px;margin-top:2px}
   .p-bot{margin-top:6px}
   .p-bot .cta{padding:10px 30px}
-  .palco .pfaixa i{height:clamp(44px,11vh,110px)}
-  .p-o select,.p-o input{padding:7px 9px}
+  .p-o select,.p-o input{padding:5px 8px;font-size:.85rem}
+}
+@media(max-height:660px){
+  .palco{gap:5px;padding:8px 14px}
+  .p-bpm strong{font-size:2.8rem}
+  .p-step{width:36px;height:36px;font-size:1.3rem}
+  .p-mid input[type=range]{height:20px}
+  .p-bot{margin-top:4px}
+  .p-bot .cta{padding:8px 28px;font-size:.95rem}
+  .palco .seg button{padding:7px 4px}
+  .p-sair{padding:5px 14px}
+  .p-opts{gap:6px}.p-row{gap:8px}.p-o{gap:3px}
+  .p-foot button{padding:4px 14px}
+  .palco .pfaixa{min-height:36px}
 }
 .p-foot button{padding:7px 16px;border:1px solid #23265a;border-radius:999px;font-size:.75rem;font-weight:700;letter-spacing:.04em;color:#8e94bd;background:transparent}
 .p-foot button:hover{background:#ffffff14;color:#cfd3f5}
@@ -543,6 +556,19 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <div class="p-o"><label for="pp-mold">Moldura</label><select id="pp-mold"><option value="1">Ligada</option><option value="0">Desligada</option></select></div>
       <div class="p-o"><label for="pp-lat">Atraso (ms)</label><input type="number" id="pp-lat" min="0" max="400" step="5" value="0"></div>
     </div>
+    <div class="p-o">
+      <label>Mudança de tempo</label>
+      <div class="seg" role="group" aria-label="Mudança de tempo">
+        <button type="button" id="pp-mt-off" aria-pressed="true">Off</button>
+        <button type="button" id="pp-mt-up" aria-pressed="false">Aumentar</button>
+        <button type="button" id="pp-mt-down" aria-pressed="false">Diminuir</button>
+      </div>
+    </div>
+    <div class="p-row p-r3" id="pp-mt-rows" data-off="true">
+      <div class="p-o"><label for="pp-mt-q">Alterar em</label><select id="pp-mt-q"></select></div>
+      <div class="p-o"><label for="pp-mt-c">A cada</label><select id="pp-mt-c"></select></div>
+      <div class="p-o"><label for="pp-mt-t">Até (BPM)</label><input type="number" id="pp-mt-t" min="50" max="400" step="5" value="400"></div>
+    </div>
   </div>
   <div class="p-foot"><button type="button" id="pp-config">Metrônomo palco</button></div>
 </div>
@@ -678,7 +704,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
-  const VERSAO = '2026-11-07-15';
+  const VERSAO = '2026-11-07-17';
   try {
     fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
       const m = t.match(/const VERSAO = '([^']+)'/);
@@ -872,18 +898,46 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     }
     if (pVib && navigator.vibrate) { try { navigator.vibrate(i === 0 ? 45 : 20); } catch (e) {} }
   }
+  /* mudança de tempo no modo palco: sobe ou desce o BPM a cada N compassos */
+  const pMt = { modo: 'off', qi: 4, comp: 10, alvo: 400, bars: 0 };
+  MQ.forEach((q, k) => $('pp-mt-q').add(new Option(q + ' BPM', k)));
+  for (let k = 1; k <= 32; k++) $('pp-mt-c').add(new Option(k + (k === 1 ? ' comp.' : ' comp.'), k));
+  $('pp-mt-q').value = pMt.qi; $('pp-mt-c').value = pMt.comp;
+  function pintarMtP() {
+    [['off', 'pp-mt-off'], ['up', 'pp-mt-up'], ['down', 'pp-mt-down']].forEach(([k, id]) => $(id).setAttribute('aria-pressed', pMt.modo === k));
+    $('pp-mt-rows').dataset.off = pMt.modo === 'off'; $('pp-mt-t').value = pMt.alvo;
+  }
+  function setModoMtP(k) {
+    pMt.modo = k; pMt.bars = 0;
+    if (k === 'up' && pMt.alvo <= pBpm) pMt.alvo = 400;
+    if (k === 'down' && pMt.alvo >= pBpm) pMt.alvo = 50;
+    pintarMtP();
+  }
+  $('pp-mt-off').onclick = () => setModoMtP('off'); $('pp-mt-up').onclick = () => setModoMtP('up'); $('pp-mt-down').onclick = () => setModoMtP('down');
+  $('pp-mt-q').onchange = () => { pMt.qi = +$('pp-mt-q').value; };
+  $('pp-mt-c').onchange = () => { pMt.comp = +$('pp-mt-c').value; pMt.bars = 0; };
+  $('pp-mt-t').onchange = () => { pMt.alvo = Math.max(50, Math.min(400, +$('pp-mt-t').value || 400)); $('pp-mt-t').value = pMt.alvo; };
   const palco = Engine(() => pBpm, t => {
     const n = +pSig.value, i = pBeat % n; pBeat++;
+    let mudou = false;
+    if (i === n - 1 && pMt.modo !== 'off') {
+      pMt.bars++;
+      if (pMt.bars >= pMt.comp) {
+        pMt.bars = 0;
+        const q = MQ[pMt.qi], novo = pMt.modo === 'up' ? Math.min(pMt.alvo, pBpm + q) : Math.max(pMt.alvo, pBpm - q);
+        if (novo !== pBpm) { pBpm = Math.max(50, Math.min(400, novo)); mudou = true; }
+      }
+    }
     if (pRet !== 'v') click(t, i === 0 && pAcc.value === '1', i === 0 ? 1 : 0.7);
     /* visual agendado pelo relógio de áudio (não depende da animação do navegador) */
-    setTimeout(() => { if (palco.running) piscaP(i); }, Math.max(0, (t - ac().currentTime) * 1000) + pLat);
+    setTimeout(() => { if (palco.running) { piscaP(i); if (mudou) setP(pBpm); } }, Math.max(0, (t - ac().currentTime) * 1000) + pLat);
     return null;
   });
   function setPlayP(on) {
     ['p-play', 'pp-play'].forEach(id => { const b = $(id); b.dataset.on = on; b.textContent = on ? 'Parar' : 'Iniciar'; });
     if (!on) { pFaixas.forEach(f => [...f.children].forEach(d => d.classList.remove('on', 'um'))); pPal.classList.remove('f1', 'f'); }
   }
-  function alternarP() { if (palco.running) { palco.stop(); setPlayP(false); } else { pBeat = 0; palco.start(); setPlayP(true); } }
+  function alternarP() { if (palco.running) { palco.stop(); setPlayP(false); } else { pBeat = 0; pMt.bars = 0; palco.start(); setPlayP(true); } }
   function abrirPalco() {
     pPal.hidden = false; document.body.style.overflow = 'hidden';
     try { const r = pPal.requestFullscreen && pPal.requestFullscreen(); if (r && r.catch) r.catch(() => {}); } catch (e) {}
