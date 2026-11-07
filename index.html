@@ -179,6 +179,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .palco{position:fixed;inset:0;z-index:100;background:#06071a;display:flex;flex-direction:column;justify-content:space-between;gap:12px;padding:16px 20px;color:#fff;--fw:16px;overflow-y:auto}
 .palco.f1{box-shadow:inset 0 0 0 var(--fw) #ff5100}
 .palco.f{box-shadow:inset 0 0 0 var(--fw) #1b1bf2}
+.p-top span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .p-top{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#9aa0c8;font-size:.8rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase}
 .p-sair{border:1px solid #3a3d6e;border-radius:999px;padding:10px 20px;color:#cfd3f5;font-weight:700;background:transparent}
 .p-mid{text-align:center}
@@ -190,10 +191,24 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .palco .pfaixa{margin-top:0;gap:10px}
 .palco .pfaixa i{height:clamp(52px,14vh,150px);background:#12143a;border-color:#23265a;color:#5b6096;font-size:clamp(1.6rem,4vw,3rem)}
 .palco .seg{margin-top:0;gap:8px;flex-wrap:nowrap}
-.palco .seg button{flex:1;padding:10px 6px;font-size:.85rem;border-color:#3a3d6e;color:#cfd3f5;background:transparent;box-shadow:none}
+.palco .seg button{flex:1;padding:9px 4px;font-size:.82rem;white-space:nowrap;border-color:#3a3d6e;color:#cfd3f5;background:transparent;box-shadow:none}
 .palco .seg button:hover{background:#ffffff14}
 .palco .seg button[aria-pressed=true]{background:linear-gradient(90deg,#ff5100,#fb923c);border-color:transparent;color:#fff;box-shadow:0 6px 18px #ff510040}
 .p-opts{display:grid;gap:10px}
+.p-foot{display:flex;justify-content:center}
+@media(max-height:700px){
+  .palco{gap:8px;padding:10px 16px}
+  .p-sair{padding:7px 16px}
+  .p-step{width:40px;height:40px}
+  .p-mid small{margin-top:0}
+  .p-mid input[type=range]{height:26px;margin-top:2px}
+  .p-bot{margin-top:6px}
+  .p-bot .cta{padding:10px 30px}
+  .palco .pfaixa i{height:clamp(44px,11vh,110px)}
+  .p-o select,.p-o input{padding:7px 9px}
+}
+.p-foot button{padding:7px 16px;border:1px solid #23265a;border-radius:999px;font-size:.75rem;font-weight:700;letter-spacing:.04em;color:#8e94bd;background:transparent}
+.p-foot button:hover{background:#ffffff14;color:#cfd3f5}
 .p-row{display:grid;gap:10px}
 .p-r2{grid-template-columns:1fr 1fr}
 .p-r3{grid-template-columns:repeat(3,1fr)}
@@ -229,7 +244,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" id="tab-com" aria-selected="true" aria-controls="p-com">Metrônomo</button>
-      <button class="tab" role="tab" id="tab-pal" aria-selected="false" aria-controls="p-pal">Metrônomo palco</button>
+      <button class="tab" role="tab" id="tab-pal" aria-selected="false" aria-controls="p-pal">Modo palco</button>
       <button class="tab" role="tab" id="tab-tre" aria-selected="false" aria-controls="p-tre">Treino de bateria</button>
     </div>
 
@@ -462,7 +477,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <section class="scene b" id="scene-como-p" aria-labelledby="t4" hidden>
   <div class="wrap">
-    <div class="kicker">02 / Como usar o metrônomo palco</div>
+    <div class="kicker">02 / Como usar o modo palco</div>
     <h2 class="title" id="t4">Veja o tempo com a visão periférica e toque no clique</h2>
     <p class="lead">Feito para ensaio e show: a batida acende em blocos grandes, a batida 1 se destaca em laranja e o modo palco ocupa a tela toda, com fundo escuro.</p>
     <div class="steps">
@@ -529,6 +544,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <div class="p-o"><label for="pp-lat">Atraso (ms)</label><input type="number" id="pp-lat" min="0" max="400" step="5" value="0"></div>
     </div>
   </div>
+  <div class="p-foot"><button type="button" id="pp-config">Metrônomo palco</button></div>
 </div>
 
 <footer><div class="wrap"><span>Metrônomo de Bateria · uso pessoal de estudo</span><span>Barra de espaço inicia e pausa o modo aberto</span></div></footer>
@@ -662,7 +678,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
-  const VERSAO = '2026-11-07-13';
+  const VERSAO = '2026-11-07-15';
   try {
     fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
       const m = t.match(/const VERSAO = '([^']+)'/);
@@ -684,7 +700,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   }
   tabs.com[0].onclick = () => showTab('com');
   tabs.tre[0].onclick = () => showTab('tre');
-  tabs.pal[0].onclick = () => showTab('pal');
+  tabs.pal[0].onclick = () => { showTab('pal'); abrirPalco(); };
 
   /* ---------- metrônomo comum ---------- */
   let cBpm = 120, cBeat = 0;
@@ -879,7 +895,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   }
   document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) fecharPalco(); });
   $('p-play').onclick = $('pp-play').onclick = alternarP;
-  $('p-palco').onclick = abrirPalco; $('pp-sair').onclick = fecharPalco;
+  $('p-palco').onclick = abrirPalco; $('pp-sair').onclick = $('pp-config').onclick = fecharPalco;
   $('p-range').oninput = $('pp-range').oninput = e => setP(+e.target.value);
   $('p-minus').onclick = $('pp-minus').onclick = () => setP(pBpm - 1);
   $('p-plus').onclick = $('pp-plus').onclick = () => setP(pBpm + 1);
