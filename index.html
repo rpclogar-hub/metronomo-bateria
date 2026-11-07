@@ -185,6 +185,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .p-bpm{display:flex;align-items:center;justify-content:center;gap:clamp(12px,4vw,40px)}
 .p-bpm strong{font-size:clamp(4.5rem,16vw,9rem);letter-spacing:-.07em;line-height:1;font-variant-numeric:tabular-nums}
 .p-step{width:56px;height:56px;border-radius:50%;border:1px solid #3a3d6e;color:#cfd3f5;font-size:1.6rem;font-weight:700;background:transparent}
+.p-mid input[type=range]{display:block;width:min(86vw,640px);height:36px;margin:14px auto 0;accent-color:#ff5100}
 .p-mid small{display:block;color:#fb923c;font-weight:800;letter-spacing:.2em;margin-top:2px}
 .palco .pfaixa i{height:clamp(80px,22vh,200px);background:#12143a;border-color:#23265a;color:#5b6096;font-size:clamp(1.6rem,4vw,3rem)}
 .palco .pfaixa i.on{background:#1b1bf2;border-color:#4c4cff;color:#fff}
@@ -496,6 +497,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <div class="p-mid">
     <div class="p-bpm"><button type="button" class="p-step" id="pp-minus" aria-label="Diminuir 1 BPM">−</button><strong id="pp-bpm">120</strong><button type="button" class="p-step" id="pp-plus" aria-label="Aumentar 1 BPM">+</button></div>
     <small>BPM</small>
+    <input type="range" id="pp-range" min="50" max="400" value="120" aria-label="BPM do modo palco">
   </div>
   <div class="pfaixa" id="pp-faixa"></div>
   <div class="p-bot"><button type="button" class="cta" id="pp-play" data-on="false">Iniciar</button></div>
@@ -632,7 +634,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
-  const VERSAO = '2026-11-07-9';
+  const VERSAO = '2026-11-07-10';
   try {
     fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
       const m = t.match(/const VERSAO = '([^']+)'/);
@@ -810,7 +812,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   }
   function setP(v) {
     pBpm = Math.max(50, Math.min(400, Math.round(v)));
-    $('p-bpm').textContent = $('pp-bpm').textContent = pBpm; $('p-range').value = pBpm; salvarP();
+    $('p-bpm').textContent = $('pp-bpm').textContent = pBpm; $('p-range').value = $('pp-range').value = pBpm; salvarP();
   }
   function setRetP(k) {
     pRet = k;
@@ -850,7 +852,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) fecharPalco(); });
   $('p-play').onclick = $('pp-play').onclick = alternarP;
   $('p-palco').onclick = abrirPalco; $('pp-sair').onclick = fecharPalco;
-  $('p-range').oninput = e => setP(+e.target.value);
+  $('p-range').oninput = $('pp-range').oninput = e => setP(+e.target.value);
   $('p-minus').onclick = $('pp-minus').onclick = () => setP(pBpm - 1);
   $('p-plus').onclick = $('pp-plus').onclick = () => setP(pBpm + 1);
   $('p-r-av').onclick = () => setRetP('av'); $('p-r-a').onclick = () => setRetP('a'); $('p-r-v').onclick = () => setRetP('v');
