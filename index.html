@@ -80,6 +80,23 @@ select,input[type=number]{font:inherit;font-size:1rem;padding:10px 12px;border:1
 .ghost{padding:15px 26px;border:1px solid var(--primary);border-radius:999px;font-weight:700;color:var(--primary);background:#fff}
 .ghost:hover{background:var(--mist)}
 
+/* mudança de tempo (metrônomo) */
+.mt{border-top:2px solid var(--navy);padding-top:14px;margin-top:34px}
+.seg{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.seg button{padding:10px 22px;border:1px solid var(--line);border-radius:999px;font-weight:700;font-size:.92rem;color:var(--primary);background:#fff}
+.seg button:hover{background:var(--mist)}
+.seg button[aria-pressed=true]{background:linear-gradient(90deg,#ff5100,#fb923c);border-color:transparent;color:#fff;box-shadow:0 6px 18px #ff510033}
+.mt-rows{margin-top:14px}
+.mt-rows[data-off=true]{opacity:.4;pointer-events:none}
+.mt-row{display:grid;grid-template-columns:110px 1fr;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.mt-row:first-child{border-top:0}
+.mt-row>span{font-size:.9rem;color:var(--note)}
+.mt-ctl{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mt-ctl .step{width:44px;height:44px}
+.mt-ctl output{flex:1;text-align:center;font-weight:800;font-size:1.15rem;letter-spacing:-.03em;color:var(--navy);font-variant-numeric:tabular-nums}
+.mt-ctl output small{font-size:.72rem;letter-spacing:.08em;color:var(--note);margin-left:4px;font-weight:800}
+.mt-msg{margin-top:10px;font-size:.85rem;color:var(--note);min-height:1.3em}
+
 /* histórico */
 .hist-wrap{grid-column:1}
 .tempo{border-top:2px solid var(--navy);padding-top:14px;margin-bottom:34px}
@@ -87,23 +104,23 @@ select,input[type=number]{font:inherit;font-size:1rem;padding:10px 12px;border:1
 .rec{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--primary)}
 .rec:not([hidden]){animation:pisca 1.4s ease-in-out infinite}
 @keyframes pisca{50%{opacity:.35}}
-#tempo-dias{list-style:none;margin-top:10px}
-#tempo-dias li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:.9rem;color:var(--note);font-variant-numeric:tabular-nums}
+#tempo-dias,#c-tempo-dias{list-style:none;margin-top:10px}
+#tempo-dias li,#c-tempo-dias li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:.9rem;color:var(--note);font-variant-numeric:tabular-nums}
 #tempo-dias li b{color:var(--navy);font-weight:700}
 .hist{margin-top:0;border-top:2px solid var(--navy);padding-top:14px}
 .hist-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .link{font-size:.8rem;font-weight:700;color:var(--primary);text-decoration:underline;text-underline-offset:3px;padding:4px 0}
-#h-list{list-style:none;margin-top:8px}
-#h-list li{display:grid;grid-template-columns:34px 1fr auto auto;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
-#h-list em{font-style:normal;font-weight:800;font-size:.72rem;color:var(--primary)}
-#h-list b{font-size:1.35rem;letter-spacing:-.05em;color:var(--navy);font-variant-numeric:tabular-nums}
-#h-list b small{font-size:.7rem;letter-spacing:.08em;color:var(--note);margin-left:4px}
-#h-list time{font-size:.85rem;color:var(--note);font-variant-numeric:tabular-nums}
-#h-list li:first-child b{color:var(--primary)}
-#h-list .use{font-size:.78rem;font-weight:700;color:var(--primary);border:1px solid var(--line);border-radius:3px;padding:6px 10px;background:#fff}
-#h-list .use:hover{background:var(--mist)}
+#h-list,#c-h-list{list-style:none;margin-top:8px}
+#h-list li,#c-h-list li{display:grid;grid-template-columns:34px 1fr auto auto;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+#h-list em,#c-h-list em{font-style:normal;font-weight:800;font-size:.72rem;color:var(--primary)}
+#h-list b,#c-h-list b{font-size:1.35rem;letter-spacing:-.05em;color:var(--navy);font-variant-numeric:tabular-nums}
+#h-list b small,#c-h-list b small{font-size:.7rem;letter-spacing:.08em;color:var(--note);margin-left:4px}
+#h-list time,#c-h-list time{font-size:.85rem;color:var(--note);font-variant-numeric:tabular-nums}
+#h-list li:first-child b,#c-h-list li:first-child b{color:var(--primary)}
+#h-list .use,#c-h-list .use{font-size:.78rem;font-weight:700;color:var(--primary);border:1px solid var(--line);border-radius:3px;padding:6px 10px;background:#fff}
+#h-list .use:hover,#c-h-list .use:hover{background:var(--mist)}
 .h-vazio{padding:14px 0;color:var(--note);font-size:.9rem}
-@media(max-width:560px){#h-list li{grid-template-columns:28px 1fr auto;}#h-list time{grid-column:2;grid-row:2;font-size:.78rem}#h-list .use{grid-column:3;grid-row:1/3}}
+@media(max-width:560px){#h-list li,#c-h-list li{grid-template-columns:28px 1fr auto;}#h-list time,#c-h-list time{grid-column:2;grid-row:2;font-size:.78rem}#h-list .use,#c-h-list .use{grid-column:3;grid-row:1/3}}
 /* indicadores */
 .beats{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
 .dot{width:46px;height:46px;border-radius:50%;border:2px solid var(--line);background:#fff;display:grid;place-items:center;font-weight:800;color:var(--note);transition:.08s}
@@ -185,7 +202,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" id="tab-tre" aria-selected="true" aria-controls="p-tre">Treino de bateria</button>
-      <button class="tab" role="tab" id="tab-com" aria-selected="false" aria-controls="p-com">Metrônomo comum</button>
+      <button class="tab" role="tab" id="tab-com" aria-selected="false" aria-controls="p-com">Metrônomo</button>
     </div>
 
     <!-- TREINO -->
@@ -299,6 +316,37 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
           </div>
           <div class="label" style="margin-top:28px">Batida</div>
           <div class="beats" id="c-beats" style="margin-top:10px"></div>
+          <div class="mt">
+            <div class="label">Mudança de tempo</div>
+            <div class="seg" role="group" aria-label="Mudança de tempo">
+              <button type="button" id="mt-off" aria-pressed="true">Off</button>
+              <button type="button" id="mt-up" aria-pressed="false">Aumentar</button>
+              <button type="button" id="mt-down" aria-pressed="false">Diminuir</button>
+            </div>
+            <div class="mt-rows" id="mt-rows" data-off="true">
+              <div class="mt-row"><span>Alterar em</span><div class="mt-ctl"><button class="step" type="button" id="mt-q-m" aria-label="Diminuir quantidade de BPM">−</button><output id="mt-q">3<small>BPM</small></output><button class="step" type="button" id="mt-q-p" aria-label="Aumentar quantidade de BPM">+</button></div></div>
+              <div class="mt-row"><span>A cada</span><div class="mt-ctl"><button class="step" type="button" id="mt-c-m" aria-label="Menos compassos">−</button><output id="mt-c">10<small>compassos</small></output><button class="step" type="button" id="mt-c-p" aria-label="Mais compassos">+</button></div></div>
+              <div class="mt-row"><span>Até</span><div class="mt-ctl"><button class="step" type="button" id="mt-t-m" aria-label="Diminuir limite de BPM">−</button><output id="mt-t">300<small>BPM</small></output><button class="step" type="button" id="mt-t-p" aria-label="Aumentar limite de BPM">+</button></div></div>
+            </div>
+            <div class="mt-msg" id="mt-msg" role="status"></div>
+          </div>
+        </div>
+        <div class="hist-wrap">
+          <div class="tempo">
+            <div class="hist-head">
+              <span class="label">Tempo estudado hoje</span>
+              <span class="rec" id="c-rec" hidden>● contando</span>
+            </div>
+            <div class="tempo-num" id="c-tempo-hoje">0 min</div>
+            <ol id="c-tempo-dias" aria-label="Tempo estudado nos dias anteriores"></ol>
+          </div>
+          <div class="hist">
+            <div class="hist-head">
+              <span class="label">Histórico de BPM · últimos 10</span>
+              <button class="link" id="c-h-clear" type="button">Limpar</button>
+            </div>
+            <ol id="c-h-list" aria-live="polite"></ol>
+          </div>
         </div>
       </div>
     </div>
@@ -452,7 +500,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
-  const VERSAO = '2026-10-16-6';
+  const VERSAO = '2026-11-07-3';
   try {
     fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
       const m = t.match(/const VERSAO = '([^']+)'/);
@@ -481,17 +529,57 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     for (let i = 0; i < n; i++) { const d = document.createElement('div'); d.className = 'dot' + (i === 0 && cAcc.value === '1' ? ' acc' : ''); d.textContent = i + 1; beatsEl.appendChild(d); }
     cBeat = 0;
   }
+  let cHt;
   function setC(v) {
     cBpm = Math.max(50, Math.min(300, Math.round(v)));
     $('c-bpm').textContent = cBpm; $('c-range').value = cBpm;
+    if (comum.running) { clearTimeout(cHt); cHt = setTimeout(() => registrar(cBpm, 'c'), 1500); }
   }
   const comum = Engine(() => cBpm, t => {
     const n = +cSig.value, i = cBeat % n; cBeat++;
     click(t, i === 0 && cAcc.value === '1', i === 0 ? 1 : 0.7);
-    return { ui() { [...beatsEl.children].forEach((d, k) => d.classList.toggle('on', k === i)); } };
+    let mudou = false;
+    if (i === n - 1 && mt.modo !== 'off') {
+      mt.bars++;
+      if (mt.bars >= mt.comp) {
+        mt.bars = 0;
+        const q = MQ[mt.qi], novo = mt.modo === 'up' ? Math.min(mt.alvo, cBpm + q) : Math.max(mt.alvo, cBpm - q);
+        if (novo !== cBpm) { cBpm = Math.max(50, Math.min(300, novo)); mudou = true; }
+      }
+    }
+    return { ui() { [...beatsEl.children].forEach((d, k) => d.classList.toggle('on', k === i)); if (mudou) { setC(cBpm); $('mt-msg').textContent = (mt.modo === 'up' ? 'Subiu' : 'Desceu') + ' para ' + cBpm + ' BPM' + (cBpm === mt.alvo ? ' (limite atingido).' : '.'); } } };
   });
+  /* ---------- mudança de tempo: sobe ou desce o BPM a cada N compassos ---------- */
+  const MQ = [1, 2, 3, 4, 5, 10, 20, 30, 40, 50];
+  const mt = { modo: 'off', qi: 2, comp: 10, alvo: 300, bars: 0 };
+  function pintarMt() {
+    $('mt-q').innerHTML = MQ[mt.qi] + '<small>BPM</small>';
+    $('mt-c').innerHTML = mt.comp + '<small>' + (mt.comp === 1 ? 'compasso' : 'compassos') + '</small>';
+    $('mt-t').innerHTML = mt.alvo + '<small>BPM</small>';
+    $('mt-rows').dataset.off = mt.modo === 'off';
+    [['off', 'mt-off'], ['up', 'mt-up'], ['down', 'mt-down']].forEach(([k, id]) => $(id).setAttribute('aria-pressed', mt.modo === k));
+  }
+  function setModoMt(k) {
+    mt.modo = k; mt.bars = 0;
+    if (k === 'up' && mt.alvo <= cBpm) mt.alvo = 300;
+    if (k === 'down' && mt.alvo >= cBpm) mt.alvo = 50;
+    $('mt-msg').textContent = k === 'off' ? '' : (k === 'up' ? 'Sobe ' : 'Desce ') + MQ[mt.qi] + ' BPM a cada ' + mt.comp + (mt.comp === 1 ? ' compasso' : ' compassos') + ', até ' + mt.alvo + ' BPM.';
+    pintarMt();
+  }
+  $('mt-off').onclick = () => setModoMt('off');
+  $('mt-up').onclick = () => setModoMt('up');
+  $('mt-down').onclick = () => setModoMt('down');
+  const ajMt = () => setModoMt(mt.modo);
+  $('mt-q-m').onclick = () => { mt.qi = Math.max(0, mt.qi - 1); ajMt(); };
+  $('mt-q-p').onclick = () => { mt.qi = Math.min(MQ.length - 1, mt.qi + 1); ajMt(); };
+  $('mt-c-m').onclick = () => { mt.comp = Math.max(1, mt.comp - 1); ajMt(); };
+  $('mt-c-p').onclick = () => { mt.comp = Math.min(99, mt.comp + 1); ajMt(); };
+  $('mt-t-m').onclick = () => { mt.alvo = Math.max(50, mt.alvo - 5); ajMt(); };
+  $('mt-t-p').onclick = () => { mt.alvo = Math.min(300, mt.alvo + 5); ajMt(); };
+  pintarMt();
+
   function setPlayC(on) { const b = $('c-play'); b.dataset.on = on; b.textContent = on ? 'Parar' : 'Iniciar'; if (!on) [...beatsEl.children].forEach(d => d.classList.remove('on')); }
-  $('c-play').onclick = () => { if (comum.running) { comum.stop(); setPlayC(false); } else { cBeat = 0; comum.start(); setPlayC(true); } };
+  $('c-play').onclick = () => { if (comum.running) { comum.stop(); setPlayC(false); } else { cBeat = 0; mt.bars = 0; comum.start(); setPlayC(true); registrar(cBpm, 'c'); } };
   $('c-range').oninput = e => setC(+e.target.value);
   $('c-minus').onclick = () => setC(cBpm - 1);
   $('c-plus').onclick = () => setC(cBpm + 1);
@@ -562,66 +650,74 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       if (levelUp) { registrar(snap.bpm); flash('Sobe para ' + snap.bpm + ' BPM'); }
     } };
   });
-  /* ---------- tempo estudado por dia ---------- */
-  const TKEY = 'metro-tempo';
+  /* ---------- tempo estudado por dia (t = treino de bateria, c = metrônomo) ---------- */
+  const MOD = {
+    t: { tk: 'metro-tempo', hk: 'metro-hist', hoje: 'tempo-hoje', dias: 'tempo-dias', rec: 'rec', list: 'h-list', clear: 'h-clear' },
+    c: { tk: 'metro-tempo-comum', hk: 'metro-hist-comum', hoje: 'c-tempo-hoje', dias: 'c-tempo-dias', rec: 'c-rec', list: 'c-h-list', clear: 'c-h-clear' }
+  };
   const hojeKey = (d = new Date()) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-  function lerTempo() { try { return JSON.parse(localStorage.getItem(TKEY)) || {}; } catch (e) { return {}; } }
+  function lerTempo(m = 't') { try { return JSON.parse(localStorage.getItem(MOD[m].tk)) || {}; } catch (e) { return {}; } }
   function fmtTempo(seg) {
     const m = Math.floor(seg / 60), h = Math.floor(m / 60);
     if (h > 0) return h + ' h ' + String(m % 60).padStart(2, '0') + ' min';
     return m < 1 ? (seg > 0 ? 'menos de 1 min' : '0 min') : m + ' min';
   }
-  function pintarTempo() {
-    const t = lerTempo();
-    $('tempo-hoje').textContent = fmtTempo(t[hojeKey()] || 0);
-    const ul = $('tempo-dias'); ul.innerHTML = '';
+  function pintarTempo(m = 't') {
+    const t = lerTempo(m), M = MOD[m];
+    $(M.hoje).textContent = fmtTempo(t[hojeKey()] || 0);
+    const ul = $(M.dias); ul.innerHTML = '';
     Object.keys(t).filter(k => k !== hojeKey()).sort().reverse().slice(0, 6).forEach(k => {
-      const [a, m, d] = k.split('-'), li = document.createElement('li');
-      li.innerHTML = '<span>' + d + '/' + m + '/' + a + '</span><b>' + fmtTempo(t[k]) + '</b>';
+      const [a, mm, d] = k.split('-'), li = document.createElement('li');
+      li.innerHTML = '<span>' + d + '/' + mm + '/' + a + '</span><b>' + fmtTempo(t[k]) + '</b>';
       ul.appendChild(li);
     });
   }
   let ultimo = Date.now();
   setInterval(() => {
-    const agora = Date.now(), ativo = comum.running || treino.running;
-    $('rec').hidden = !ativo;
-    if (ativo) {
-      const t = lerTempo(), k = hojeKey();
+    const agora = Date.now();
+    ['t', 'c'].forEach(m => {
+      const ativo = (m === 'c' ? comum : treino).running;
+      $(MOD[m].rec).hidden = !ativo;
+      if (!ativo) return;
+      const t = lerTempo(m), k = hojeKey();
       t[k] = (t[k] || 0) + Math.min(3, (agora - ultimo) / 1000);
       const chaves = Object.keys(t).sort();
       while (chaves.length > 60) delete t[chaves.shift()];
-      try { localStorage.setItem(TKEY, JSON.stringify(t)); } catch (e) {}
-      pintarTempo();
-    }
+      try { localStorage.setItem(MOD[m].tk, JSON.stringify(t)); } catch (e) {}
+      pintarTempo(m);
+    });
     ultimo = agora;
   }, 1000);
-  pintarTempo();
+  pintarTempo('t'); pintarTempo('c');
 
   /* ---------- histórico de BPM ---------- */
-  const HKEY = 'metro-hist';
   try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
-  function lerHist() { try { return JSON.parse(localStorage.getItem(HKEY)) || []; } catch (e) { return []; } }
-  function gravarHist(l) { try { localStorage.setItem(HKEY, JSON.stringify(l)); } catch (e) {} }
+  function lerHist(m = 't') { try { return JSON.parse(localStorage.getItem(MOD[m].hk)) || []; } catch (e) { return []; } }
+  function gravarHist(l, m = 't') { try { localStorage.setItem(MOD[m].hk, JSON.stringify(l)); } catch (e) {} }
   function fmt(ts) {
     const d = new Date(ts), p = n => String(n).padStart(2, '0');
     return p(d.getDate()) + '/' + p(d.getMonth() + 1) + '/' + d.getFullYear() + ' · ' + p(d.getHours()) + ':' + p(d.getMinutes());
   }
-  function pintarHist() {
-    const l = lerHist(), ul = $('h-list'); ul.innerHTML = '';
-    if (!l.length) { ul.innerHTML = '<li class="h-vazio" style="display:block">Nenhum treino registrado ainda.</li>'; return; }
+  function pintarHist(m = 't') {
+    const l = lerHist(m), ul = $(MOD[m].list); ul.innerHTML = '';
+    if (!l.length) { ul.innerHTML = '<li class="h-vazio" style="display:block">' + (m === 'c' ? 'Nenhum BPM registrado ainda.' : 'Nenhum treino registrado ainda.') + '</li>'; return; }
     l.forEach((h, i) => {
       const li = document.createElement('li');
       li.innerHTML = '<em>' + String(i + 1).padStart(2, '0') + '</em><b>' + h.bpm + '<small>BPM</small></b><time datetime="' + new Date(h.ts).toISOString() + '">' + fmt(h.ts) + '</time><button class="use" type="button">Usar</button>';
-      li.querySelector('.use').onclick = () => { if (treino.running) return; $('t-start').value = h.bpm; reset(); $('t-msg').textContent = 'BPM inicial ajustado para ' + h.bpm + '.'; };
+      li.querySelector('.use').onclick = () => {
+        if (m === 'c') { setC(h.bpm); return; }
+        if (treino.running) return; $('t-start').value = h.bpm; reset(); $('t-msg').textContent = 'BPM inicial ajustado para ' + h.bpm + '.';
+      };
       ul.appendChild(li);
     });
   }
-  function registrar(bpm) {
-    const l = lerHist();
+  function registrar(bpm, m = 't') {
+    const l = lerHist(m);
     if (l.length && l[0].bpm === bpm) l[0].ts = Date.now(); else l.unshift({ bpm, ts: Date.now() });
-    gravarHist(l.slice(0, 10)); pintarHist();
+    gravarHist(l.slice(0, 10), m); pintarHist(m);
   }
   $('h-clear').onclick = () => { gravarHist([]); pintarHist(); };
+  $('c-h-clear').onclick = () => { gravarHist([], 'c'); pintarHist('c'); };
 
   let ft;
   function flash(m) { const f = $('t-flash'); f.textContent = m; f.classList.add('on'); clearTimeout(ft); ft = setTimeout(() => f.classList.remove('on'), 3500); }
@@ -643,7 +739,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     if (!treino.running) reset();
   });
   { const h = lerHist(); if (h.length) $('t-start').value = h[0].bpm; }
-  reset(); pintarHist();
+  reset(); pintarHist(); pintarHist('c');
+  { const h = lerHist('c'); if (h.length) setC(h[0].bpm); }
 
   /* espaço inicia/pausa o modo aberto */
   document.addEventListener('keydown', e => {
