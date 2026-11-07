@@ -171,6 +171,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 /* metrônomo palco */
 .pfaixa{display:grid;gap:12px;margin-top:12px}
 .pfaixa i{height:78px;border-radius:10px;border:2px solid var(--line);background:#fff;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:1.5rem;color:var(--note)}
+.pfaixa i{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.pfaixa i.ac{box-shadow:inset 0 5px 0 #ff5100}
 .pfaixa i.on{background:var(--primary);border-color:var(--primary);color:#fff}
 .pfaixa i.on.um{background:#ff5100;border-color:#ff5100}
 .legenda{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:.85rem;color:var(--note)}
@@ -225,6 +227,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .p-row{display:grid;gap:10px}
 .p-r2{grid-template-columns:1fr 1fr}
 .p-r3{grid-template-columns:repeat(3,1fr)}
+.p-r4{grid-template-columns:repeat(4,1fr);gap:6px}
+.p-r4 .p-o label{font-size:.58rem;letter-spacing:.05em}
+.p-r4 .p-o select,.p-r4 .p-o input{padding-left:6px;padding-right:4px}
 .p-o{display:flex;flex-direction:column;gap:5px;min-width:0}
 .p-o label{font-size:.62rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:#9aa0c8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .p-o select,.p-o input{width:100%;min-width:0;font:inherit;font-size:.9rem;padding:9px 10px;border:1px solid #23265a;border-radius:8px;background:#12143a;color:#fff}
@@ -300,15 +305,15 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <div>
           <div class="label">Batida</div>
           <div class="pfaixa" id="p-faixa"></div>
-          <div class="legenda"><span class="l1">Batida 1 (acento): laranja</span><span class="l2">Demais batidas: azul</span></div>
+          <div class="legenda"><span class="l1">Acento: laranja</span><span class="l2">Demais batidas: azul</span><span>Toque num bloco para marcar o acento</span></div>
           <div class="opts" style="margin-top:26px">
             <div class="opt">
-              <label class="label" for="p-sig">Tempos por compasso</label>
-              <select id="p-sig"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select>
+              <label class="label" for="p-sig">Compasso</label>
+              <select id="p-sig"><option>2/2</option><option>3/2</option><option>4/2</option><option>8/2</option><option>1/4</option><option>2/4</option><option>3/4</option><option selected>4/4</option><option>5/4</option><option>6/4</option><option>7/4</option><option>8/4</option><option>3/8</option><option>5/8</option><option>6/8</option><option>7/8</option><option>9/8</option><option>12/8</option></select>
             </div>
             <div class="opt">
-              <label class="label" for="p-acc">Acento no 1</label>
-              <select id="p-acc"><option value="1" selected>Ligado</option><option value="0">Desligado</option></select>
+              <label class="label" for="p-acc">Acento</label>
+              <select id="p-acc"><option value="1" selected>Só no 1</option><option value="0">Sem acento</option><option value="13">No 1 e no 3</option><option value="24">No 2 e no 4</option><option value="g2">De 2 em 2</option><option value="g3">De 3 em 3</option><option value="all">Todos os tempos</option><option value="custom">Personalizado</option></select>
             </div>
           </div>
           <div class="opts">
@@ -494,7 +499,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <p class="lead">Feito para ensaio e show: a batida acende em blocos grandes, a batida 1 se destaca em laranja e o modo palco ocupa a tela toda, com fundo escuro.</p>
     <div class="steps">
       <div class="s"><em>01</em><h3>Retorno</h3><p>Escolha Som e visual ou Só visual. Em Só visual o metrônomo fica totalmente mudo, ideal para tocar sem clique no ouvido.</p></div>
-      <div class="s"><em>02</em><h3>Faixa de batidas</h3><p>Cada tempo do compasso é um bloco grande. A batida 1 acende em laranja e as outras em azul, então você reconhece o início do compasso de relance.</p></div>
+      <div class="s"><em>02</em><h3>Faixa de batidas</h3><p>Cada tempo do compasso é um bloco grande. Os tempos com acento acendem em laranja e os outros em azul. Escolha o acento no campo Acento ou toque direto num bloco para marcar ou desmarcar.</p></div>
       <div class="s"><em>03</em><h3>Modo palco</h3><p>Abre a tela cheia, com o BPM enorme e a moldura piscando. Se o visual chegar adiantado em relação ao som, por exemplo com fone Bluetooth, aumente o atraso do visual.</p></div>
     </div>
     <p class="question">Você consegue bater junto com a luz sem ouvir o clique?</p>
@@ -546,8 +551,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <div class="pfaixa" id="pp-faixa"></div>
   <div class="p-opts">
     <div class="p-row p-r2">
-      <div class="p-o"><label for="pp-sig">Tempos por compasso</label><select id="pp-sig"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div>
-      <div class="p-o"><label for="pp-acc">Acento no 1</label><select id="pp-acc"><option value="1">Ligado</option><option value="0">Desligado</option></select></div>
+      <div class="p-o"><label for="pp-sig">Compasso</label><select id="pp-sig"><option>2/2</option><option>3/2</option><option>4/2</option><option>8/2</option><option>1/4</option><option>2/4</option><option>3/4</option><option selected>4/4</option><option>5/4</option><option>6/4</option><option>7/4</option><option>8/4</option><option>3/8</option><option>5/8</option><option>6/8</option><option>7/8</option><option>9/8</option><option>12/8</option></select></div>
+      <div class="p-o"><label for="pp-acc">Acento</label><select id="pp-acc"><option value="1">Só no 1</option><option value="0">Sem acento</option><option value="13">No 1 e no 3</option><option value="24">No 2 e no 4</option><option value="g2">De 2 em 2</option><option value="g3">De 3 em 3</option><option value="all">Todos os tempos</option><option value="custom">Personalizado</option></select></div>
     </div>
     <div class="p-row p-r3">
       <div class="p-o"><label for="pp-bri">Brilho</label><select id="pp-bri"><option value="6px">Baixo</option><option value="10px">Médio</option><option value="16px">Alto</option></select></div>
@@ -557,15 +562,21 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="p-o">
       <label>Mudança de tempo</label>
       <div class="seg" role="group" aria-label="Mudança de tempo">
-        <button type="button" id="pp-mt-off" aria-pressed="true">Off</button>
         <button type="button" id="pp-mt-up" aria-pressed="false">Aumentar</button>
         <button type="button" id="pp-mt-down" aria-pressed="false">Diminuir</button>
+        <button type="button" id="pp-mt-ping" aria-pressed="false">Sobe e desce</button>
       </div>
     </div>
     <div class="p-row p-r3" id="pp-mt-rows" data-off="true">
       <div class="p-o"><label for="pp-mt-q">Alterar em</label><select id="pp-mt-q"></select></div>
       <div class="p-o"><label for="pp-mt-c">A cada</label><select id="pp-mt-c"></select></div>
       <div class="p-o"><label for="pp-mt-t">Até (BPM)</label><input type="number" id="pp-mt-t" min="50" max="400" step="5" value="400"></div>
+    </div>
+    <div class="p-row p-r4" id="pp-mt-rows4" hidden>
+      <div class="p-o"><label for="pp-mt-i4">De (BPM)</label><input type="number" id="pp-mt-i4" min="50" max="400" step="5" value="120"></div>
+      <div class="p-o"><label for="pp-mt-t4">Até (BPM)</label><input type="number" id="pp-mt-t4" min="50" max="400" step="5" value="160"></div>
+      <div class="p-o"><label for="pp-mt-q4">Alterar</label><select id="pp-mt-q4"></select></div>
+      <div class="p-o"><label for="pp-mt-c4">A cada</label><select id="pp-mt-c4"></select></div>
     </div>
   </div>
   <div class="p-foot"><button type="button" id="pp-config">Metrônomo palco</button></div>
@@ -702,7 +713,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') travarTela(); });
 
   /* atualização automática: se o navegador guardou uma versão antiga, recarrega a nova */
-  const VERSAO = '2026-11-07-18';
+  const VERSAO = '2026-11-07-19';
   try {
     fetch(location.pathname + '?c=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => {
       const m = t.match(/const VERSAO = '([^']+)'/);
@@ -869,14 +880,36 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   const PKEY = 'metro-palco';
   let pBpm = 120, pBeat = 0, pRet = 'av', pMold = true, pLat = 0, pVib = false, pTap = [];
   const pSig = $('p-sig'), pAcc = $('p-acc'), pFaixas = [$('p-faixa'), $('pp-faixa')], pPal = $('palco');
-  function salvarP() { try { localStorage.setItem(PKEY, JSON.stringify({ bpm: pBpm, sig: pSig.value, acc: pAcc.value, ret: pRet, mold: $('p-mold').value, bri: $('p-bri').value, lat: pLat, vib: pVib ? '1' : '0' })); } catch (e) {} }
+  /* acento: presets e personalizado (toque no bloco) */
+  let pCustom = [], pAccPrev = '1';
+  function accPreset(mode, i, n) {
+    switch (mode) {
+      case '1': return i === 0;
+      case '0': return false;
+      case '13': return i === 0 || i === 2;
+      case '24': return i === 1 || i === 3;
+      case 'g2': return i % 2 === 0;
+      case 'g3': return i % 3 === 0;
+      case 'all': return true;
+      case 'custom': return !!pCustom[i];
+    }
+    return i === 0;
+  }
+  const isAcc = i => accPreset(pAcc.value, i, parseInt(pSig.value));
+  function pintarAc() { pFaixas.forEach(f => [...f.children].forEach((d, k) => d.classList.toggle('ac', isAcc(k)))); }
+  function tocarBloco(k) {
+    if (pAcc.value !== 'custom') { const n = 12; pCustom = Array.from({ length: n }, (_, i) => accPreset(pAcc.value, i, n)); }
+    pCustom[k] = !pCustom[k];
+    pAcc.value = $('pp-acc').value = 'custom'; pintarAc(); salvarP();
+  }
+  function salvarP() { try { localStorage.setItem(PKEY, JSON.stringify({ bpm: pBpm, sig: pSig.value, acc: pAcc.value, cus: pCustom, ret: pRet, mold: $('p-mold').value, bri: $('p-bri').value, lat: pLat, vib: pVib ? '1' : '0' })); } catch (e) {} }
   function buildP() {
-    const n = +pSig.value;
+    const n = parseInt(pSig.value);
     pFaixas.forEach(f => {
       f.innerHTML = ''; f.style.gridTemplateColumns = 'repeat(' + n + ',1fr)';
       for (let i = 0; i < n; i++) { const d = document.createElement('i'); d.textContent = i + 1; f.appendChild(d); }
     });
-    pBeat = 0; $('pp-info').textContent = 'Metrônomo palco · ' + n + ' tempos';
+    pBeat = 0; $('pp-info').textContent = 'Metrônomo palco · ' + pSig.value; pintarAc();
   }
   function setP(v) {
     pBpm = Math.max(50, Math.min(400, Math.round(v)));
@@ -889,44 +922,58 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   }
   let pFt;
   function piscaP(i) {
-    pFaixas.forEach(f => [...f.children].forEach((d, k) => { d.classList.toggle('on', k === i); d.classList.toggle('um', k === i && i === 0); }));
+    pFaixas.forEach(f => [...f.children].forEach((d, k) => { d.classList.toggle('on', k === i); d.classList.toggle('um', k === i && isAcc(i)); }));
     if (pMold && !pPal.hidden) {
-      pPal.classList.remove('f1', 'f'); pPal.classList.add(i === 0 ? 'f1' : 'f');
+      pPal.classList.remove('f1', 'f'); pPal.classList.add(isAcc(i) ? 'f1' : 'f');
       clearTimeout(pFt); pFt = setTimeout(() => pPal.classList.remove('f1', 'f'), 110);
     }
-    if (pVib && navigator.vibrate) { try { navigator.vibrate(i === 0 ? 45 : 20); } catch (e) {} }
+    if (pVib && navigator.vibrate) { try { navigator.vibrate(isAcc(i) ? 45 : 20); } catch (e) {} }
   }
-  /* mudança de tempo no modo palco: sobe ou desce o BPM a cada N compassos */
-  const pMt = { modo: 'off', qi: 4, comp: 10, alvo: 400, bars: 0 };
-  MQ.forEach((q, k) => $('pp-mt-q').add(new Option(q + ' BPM', k)));
-  for (let k = 1; k <= 32; k++) $('pp-mt-c').add(new Option(k + (k === 1 ? ' comp.' : ' comp.'), k));
-  $('pp-mt-q').value = pMt.qi; $('pp-mt-c').value = pMt.comp;
+  /* mudança de tempo no modo palco: aumentar, diminuir ou sobe e desce; clicar de novo desliga */
+  const pMt = { modo: 'off', qi: 4, comp: 10, alvo: 400, ini: 120, dir: 1, bars: 0 };
+  const MTQ = ['pp-mt-q', 'pp-mt-q4'], MTC = ['pp-mt-c', 'pp-mt-c4'], MTT = ['pp-mt-t', 'pp-mt-t4'];
+  MTQ.forEach((id, j) => MQ.forEach((q, k) => $(id).add(new Option(j ? q : q + ' BPM', k))));
+  MTC.forEach((id, j) => { for (let k = 1; k <= 32; k++) $(id).add(new Option(j ? k : k + ' comp.', k)); });
+  const lim = v => Math.max(50, Math.min(400, Math.round(+v || 0)));
   function pintarMtP() {
-    [['off', 'pp-mt-off'], ['up', 'pp-mt-up'], ['down', 'pp-mt-down']].forEach(([k, id]) => $(id).setAttribute('aria-pressed', pMt.modo === k));
-    $('pp-mt-rows').dataset.off = pMt.modo === 'off'; $('pp-mt-t').value = pMt.alvo;
+    [['up', 'pp-mt-up'], ['down', 'pp-mt-down'], ['ping', 'pp-mt-ping']].forEach(([k, id]) => $(id).setAttribute('aria-pressed', pMt.modo === k));
+    const ping = pMt.modo === 'ping';
+    $('pp-mt-rows').hidden = ping; $('pp-mt-rows4').hidden = !ping; $('pp-mt-rows').dataset.off = pMt.modo === 'off';
+    MTQ.forEach(id => $(id).value = pMt.qi); MTC.forEach(id => $(id).value = pMt.comp); MTT.forEach(id => $(id).value = pMt.alvo); $('pp-mt-i4').value = pMt.ini;
   }
   function setModoMtP(k) {
-    pMt.modo = k; pMt.bars = 0;
-    if (k === 'up' && pMt.alvo <= pBpm) pMt.alvo = 400;
-    if (k === 'down' && pMt.alvo >= pBpm) pMt.alvo = 50;
+    pMt.modo = pMt.modo === k ? 'off' : k; pMt.bars = 0; pMt.dir = 1;
+    if (pMt.modo === 'up' && pMt.alvo <= pBpm) pMt.alvo = 400;
+    if (pMt.modo === 'down' && pMt.alvo >= pBpm) pMt.alvo = 50;
+    if (pMt.modo === 'ping') { pMt.ini = pBpm; if (pMt.alvo <= pMt.ini) pMt.alvo = Math.min(400, pMt.ini + 40); }
     pintarMtP();
   }
-  $('pp-mt-off').onclick = () => setModoMtP('off'); $('pp-mt-up').onclick = () => setModoMtP('up'); $('pp-mt-down').onclick = () => setModoMtP('down');
-  $('pp-mt-q').onchange = () => { pMt.qi = +$('pp-mt-q').value; };
-  $('pp-mt-c').onchange = () => { pMt.comp = +$('pp-mt-c').value; pMt.bars = 0; };
-  $('pp-mt-t').onchange = () => { pMt.alvo = Math.max(50, Math.min(400, +$('pp-mt-t').value || 400)); $('pp-mt-t').value = pMt.alvo; };
+  $('pp-mt-up').onclick = () => setModoMtP('up'); $('pp-mt-down').onclick = () => setModoMtP('down'); $('pp-mt-ping').onclick = () => setModoMtP('ping');
+  MTQ.forEach(id => { $(id).onchange = e => { pMt.qi = +e.target.value; pintarMtP(); }; });
+  MTC.forEach(id => { $(id).onchange = e => { pMt.comp = +e.target.value; pMt.bars = 0; pintarMtP(); }; });
+  MTT.forEach(id => { $(id).onchange = e => { pMt.alvo = lim(e.target.value); pintarMtP(); }; });
+  $('pp-mt-i4').onchange = e => { pMt.ini = lim(e.target.value); pintarMtP(); };
+  pintarMtP();
   const palco = Engine(() => pBpm, t => {
-    const n = +pSig.value, i = pBeat % n; pBeat++;
+    const n = parseInt(pSig.value), i = pBeat % n; pBeat++;
+    const composto = pSig.value.endsWith('/8') && n >= 6 && n % 3 === 0;
     let mudou = false;
     if (i === n - 1 && pMt.modo !== 'off') {
       pMt.bars++;
       if (pMt.bars >= pMt.comp) {
         pMt.bars = 0;
-        const q = MQ[pMt.qi], novo = pMt.modo === 'up' ? Math.min(pMt.alvo, pBpm + q) : Math.max(pMt.alvo, pBpm - q);
-        if (novo !== pBpm) { pBpm = Math.max(50, Math.min(400, novo)); mudou = true; }
+        const q = MQ[pMt.qi]; let novo = pBpm;
+        if (pMt.modo === 'up') novo = Math.min(pMt.alvo, pBpm + q);
+        else if (pMt.modo === 'down') novo = Math.max(pMt.alvo, pBpm - q);
+        else if (pMt.alvo > pMt.ini) {
+          novo = pBpm + pMt.dir * q;
+          if (novo >= pMt.alvo) { novo = pMt.alvo; pMt.dir = -1; } else if (novo <= pMt.ini) { novo = pMt.ini; pMt.dir = 1; }
+        }
+        if (novo !== pBpm) { pBpm = lim(novo); mudou = true; }
       }
     }
-    if (pRet !== 'v') click(t, i === 0 && pAcc.value === '1', i === 0 ? 1 : 0.7);
+    const acc = isAcc(i);
+    if (pRet !== 'v') click(t, acc, acc ? 1 : (composto && pAcc.value === '1' && i % 3 === 0 ? 0.88 : 0.7));
     /* visual agendado pelo relógio de áudio (não depende da animação do navegador) */
     setTimeout(() => { if (palco.running) { piscaP(i); if (mudou) setP(pBpm); } }, Math.max(0, (t - ac().currentTime) * 1000) + pLat);
     return null;
@@ -935,7 +982,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     ['p-play', 'pp-play'].forEach(id => { const b = $(id); b.dataset.on = on; b.textContent = on ? 'Parar' : 'Iniciar'; });
     if (!on) { pFaixas.forEach(f => [...f.children].forEach(d => d.classList.remove('on', 'um'))); pPal.classList.remove('f1', 'f'); }
   }
-  function alternarP() { if (palco.running) { palco.stop(); setPlayP(false); } else { pBeat = 0; pMt.bars = 0; palco.start(); setPlayP(true); } }
+  function alternarP() { if (palco.running) { palco.stop(); setPlayP(false); } else { pBeat = 0; pMt.bars = 0; pMt.dir = 1; if (pMt.modo === 'ping') setP(lim(pMt.ini)); palco.start(); setPlayP(true); } }
   function abrirPalco() {
     pPal.hidden = false; document.body.style.overflow = 'hidden';
     try { const r = pPal.requestFullscreen && pPal.requestFullscreen(); if (r && r.catch) r.catch(() => {}); } catch (e) {}
@@ -952,7 +999,12 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   $('p-minus').onclick = $('pp-minus').onclick = () => setP(pBpm - 1);
   $('p-plus').onclick = $('pp-plus').onclick = () => setP(pBpm + 1);
   $('p-r-av').onclick = $('pp-r-av').onclick = () => setRetP('av'); $('p-r-v').onclick = $('pp-r-v').onclick = () => setRetP('v');
-  pSig.onchange = () => { buildP(); salvarP(); }; pAcc.onchange = salvarP;
+  pSig.onchange = () => { buildP(); salvarP(); }; pAcc.onchange = () => {
+    if (pAcc.value === 'custom' && !pCustom.length) pCustom = Array.from({ length: 12 }, (_, i) => accPreset(pAccPrev, i, 12));
+    if (pAcc.value !== 'custom') pAccPrev = pAcc.value;
+    pintarAc(); salvarP();
+  };
+  pFaixas.forEach(f => f.addEventListener('click', e => { const el = e.target.closest('i'); if (el) tocarBloco([...f.children].indexOf(el)); }));
   $('p-bri').onchange = () => { pPal.style.setProperty('--fw', $('p-bri').value); salvarP(); };
   $('p-mold').onchange = () => { pMold = $('p-mold').value === '1'; salvarP(); };
   $('p-lat').onchange = () => { pLat = Math.max(0, Math.min(400, +$('p-lat').value || 0)); $('p-lat').value = pLat; salvarP(); };
@@ -966,7 +1018,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   try {
     const sv = JSON.parse(localStorage.getItem(PKEY) || 'null');
     if (sv) {
-      pSig.value = sv.sig || '4'; pAcc.value = sv.acc || '1'; $('p-mold').value = sv.mold || '1'; $('p-bri').value = sv.bri || '16px';
+      pSig.value = (sv.sig && sv.sig.includes('/')) ? sv.sig : '4/4'; pAcc.value = sv.acc || '1'; if (pAcc.value !== 'custom') pAccPrev = pAcc.value; pCustom = Array.isArray(sv.cus) ? sv.cus : []; $('p-mold').value = sv.mold || '1'; $('p-bri').value = sv.bri || '16px';
       pMold = $('p-mold').value === '1'; pLat = +sv.lat || 0; $('p-lat').value = pLat; pVib = sv.vib === '1'; $('p-vib').value = sv.vib || '0';
       setRetP(sv.ret === 'v' ? 'v' : 'av'); if (sv.bpm) pBpm = sv.bpm;
     }
